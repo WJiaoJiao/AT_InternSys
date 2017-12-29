@@ -27,7 +27,6 @@
 
           <!-- 右侧主内容区 -->
           <div  class="main-right" >
-            test
             <transition name="el-fade-in-linear">
               <router-view class="view"/>
             </transition>
