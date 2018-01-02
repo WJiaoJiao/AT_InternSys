@@ -2,32 +2,13 @@
   <div id="app">
     <!-- 头部导航 -->
     <header class="header" :class="{ 'header-fixed' : headerFixed }">
-    <el-row>
-        <el-col :span="24">
-          <el-menu default-active="1" class="el-menu-demo" mode="horizontal" @select="">
-            <el-menu-item index="1">高级插件</el-menu-item>
-            <el-menu-item index="2">在线商城</el-menu-item>
-            <el-menu-item index="3">客户管理</el-menu-item>
-            <el-menu-item index="4">系统设置</el-menu-item>
-            <el-menu-item index="5">活动发布</el-menu-item>
-          </el-menu>
-        </el-col>
-    </el-row>
+      <app-nav/>
     </header>
     <div v-show="headerFixed" style="position: relative;height: 60px;width: 100%;"></div>
 
     <main>
-          <!-- 左侧导航 -->
-        <div class="main-left">
-          <el-menu default-active="/UploadExcel" class="el-menu-vertical-demo" :router="true">
-            <el-menu-item index="/UploadExcel" :class="{'isActive': active}">上传Excel</el-menu-item>
-            <el-menu-item index="/uploadPictures" :class="{'isActive': !active}">上传图片</el-menu-item>
-          </el-menu>
-        </div>
-
           <!-- 右侧主内容区 -->
           <div  class="main-right" >
-            test
             <transition name="el-fade-in-linear">
               <router-view class="view"/>
             </transition>
@@ -39,10 +20,14 @@
 <script>
   import Vue from 'vue'
   import Element from 'element-ui'
+  import Navigator from '@/components/Navigator.vue'
   import 'element-ui/lib/theme-chalk/index.css'
   Vue.use(Element)
   export default {
     name: 'app',
+    components:{
+      'app-nav': Navigator
+    },
     data: function (){
       return {
         active:true,
