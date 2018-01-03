@@ -1,11 +1,16 @@
 <template>
-    <div>
-      <h2 class="demo-color-box bg-text-primary">上传Excel</h2>
-      <el-upload class="upload-demo" drag action="/api/img/upload/capsule" multiple :on-success="uploadSuccess" :on-remove="removeAction" :before-upload="beforeAvatarUpload">
-          <i class="el-icon-upload"></i>
-          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-          <div class="el-upload__tip" slot="tip">只能上传xlsx文件</div>
-      </el-upload>
+    <div class="content">
+      <el-breadcrumb separator-class="el-icon-arrow-right" class="app-breadcrumb">
+        <el-breadcrumb-item>上传</el-breadcrumb-item>
+        <el-breadcrumb-item>上传Excel</el-breadcrumb-item>
+      </el-breadcrumb>
+      <el-card>
+        <el-upload class="upload-demo" drag action="/api/img/upload/capsule" multiple :on-success="uploadSuccess" :on-remove="removeAction" :before-upload="beforeAvatarUpload">
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+            <div class="el-upload__tip" slot="tip">只能上传xlsx文件</div>
+        </el-upload>
+      </el-card>
     </div>
 </template>
 
@@ -43,18 +48,22 @@ export default {
       tableData.shift()
     },
     beforeAvatarUpload: function(file){
-      const isXLSX = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-      console.log(file.type)
+      const isXLSX = file.name.endsWith('xlsx') || file.name.endsWith('xls')
       if (!isXLSX) {
         this.$message.error('上传文件只能是 xlsx 格式!');
       }
       return isXLSX;
     }
   },
-  created(){
-    getTest().then(function(resp){
-      console.log(resp)
-    });
+  async created(){
+    try{
+      let test = await getTest();
+      console.log(test)
+    }catch(e){
+      console.log(e)
+      this.$message.error(e.error);
+    }
+
   }
 }
 </script>

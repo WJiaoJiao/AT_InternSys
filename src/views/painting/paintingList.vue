@@ -1,7 +1,12 @@
 <template>
-    <div>
-        <h2 class="demo-color-box bg-text-primary">画作列表</h2>
-        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+    <div class="content">
+        <el-breadcrumb separator-class="el-icon-arrow-right" class="app-breadcrumb">
+          <el-breadcrumb-item>画作</el-breadcrumb-item>
+          <el-breadcrumb-item>画作列表</el-breadcrumb-item>
+        </el-breadcrumb>
+        <el-card>
+          <div slot="header">
+            <el-form :inline="true" :model="formInline" class="demo-form-inline">
             <el-form-item label="编号">
                 <el-input v-model="formInline.user" placeholder="编号"></el-input>
             </el-form-item>
@@ -18,23 +23,24 @@
                 </el-col>
             </el-form-item>
             <el-form-item label="上传时间">
-                <div style="display:inline-block">
-                    <el-date-picker
-                        v-model="value7"
-                        type="daterange"
-                        align="right"
-                        unlink-panels
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        :picker-options="pickerOptions2">
-                    </el-date-picker>
-                </div>
+              <div style="display:inline-block">
+                <el-date-picker
+                    v-model="value7"
+                    type="daterange"
+                    align="right"
+                    unlink-panels
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    :picker-options="pickerOptions2">
+                </el-date-picker>
+              </div>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="onSubmit">查询</el-button>
             </el-form-item>
         </el-form>
+      </div>
         <el-table stripe border ref="multipleTable" :data="tableData3" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column label="日期" width="120">
@@ -46,6 +52,7 @@
         <div style="margin-top: 20px">
             <el-button @click="toggleSelection()">取消选择</el-button>
         </div>
+        </el-card>
     </div>
 </template>
 

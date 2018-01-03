@@ -1,11 +1,16 @@
 <template>
-    <div>
-      <h2 class="demo-color-box bg-text-primary">上传图片</h2>
-      <el-upload class="upload-demo" drag action="/api/img/upload/capsule" multiple :on-success="uploadSuccess" :on-remove="removeAction" :before-upload="beforeAvatarUpload">
-          <i class="el-icon-upload"></i>
-          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-          <div class="el-upload__tip" slot="tip">只能上传jpg/png文件</div>
-      </el-upload>
+    <div class="content">
+      <el-breadcrumb separator-class="el-icon-arrow-right" class="app-breadcrumb">
+        <el-breadcrumb-item>上传</el-breadcrumb-item>
+        <el-breadcrumb-item>上传图片</el-breadcrumb-item>
+      </el-breadcrumb>
+      <el-card>
+        <el-upload class="upload-demo" drag action="/api/img/upload/capsule" multiple :on-success="uploadSuccess" :on-remove="removeAction" :before-upload="beforeAvatarUpload">
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+            <div class="el-upload__tip" slot="tip">只能上传jpg/png文件</div>
+        </el-upload>
+      </el-card>
     </div>
 </template>
 

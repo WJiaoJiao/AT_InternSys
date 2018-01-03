@@ -1,5 +1,5 @@
 <template>
-  <el-menu :default-active="defaultActive" class="el-menu-demo" mode="horizontal" :router="true">
+  <el-menu :default-active="defaultActive"  mode="horizontal" :router="true" style="padding:0 1%">
     <template v-for="(menu,index) in menus">
       <el-menu-item
       v-if="!menu.hasOwnProperty('children')"
