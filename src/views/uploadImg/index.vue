@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import {getTest} from '@/service/test.js'
 export default {
   name: 'UploadExcel',
   data () {
@@ -37,9 +36,7 @@ export default {
     }
   },
   created(){
-    getTest().then(function(resp){
-      console.log(resp)
-    });
+   
   }
 }
 </script>

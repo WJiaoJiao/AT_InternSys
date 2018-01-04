@@ -5,6 +5,8 @@ import uploadExcel from '@/views/uploadExcel/index.vue'
 import uploadImg from '@/views/uploadImg/index.vue'
 import paintingList from '@/views/painting/paintingList.vue'
 import author from '@/views/author/index.vue'
+import lastedList from '@/views/lastedList/index.vue'
+import lastedDetail from '@/views/lastedList/lastedDetail.vue'
 
 Vue.use(Router)
 
@@ -31,6 +33,16 @@ export default new Router({
       path: '/paintingList',
       name: 'paintingList',
       component: paintingList
+    },
+    {
+      path: '/lastedList',
+      name: 'lastedList',
+      component: lastedList
+    },
+    {
+      path: '/lastedDetail/:paintId',
+      name: 'lastedDetail',
+      component: lastedDetail
     }
   ]
 })

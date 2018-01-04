@@ -13,7 +13,7 @@ module.exports = {
     proxyTable: {
       '/api':{
         changeOrigin: true,
-        target: 'http://dev.xiangshuispace.com:18083'
+        target: 'http://dev.xiangshuispace.com:9988'
       }
     },
 

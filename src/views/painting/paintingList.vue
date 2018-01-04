@@ -8,18 +8,18 @@
           <div slot="header">
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
             <el-form-item label="编号">
-                <el-input v-model="formInline.user" placeholder="编号"></el-input>
+                <el-input v-model="formInline.id" placeholder="编号"></el-input>
             </el-form-item>
             <el-form-item label="标题">
-                <el-input v-model="formInline.user" placeholder="标题"></el-input>
+                <el-input v-model="formInline.name" placeholder="标题"></el-input>
             </el-form-item>
             <el-form-item label="编号号段" style="text-align: center">
                 <el-col :span="11">
-                    <el-input v-model="formInline.user" placeholder="开始编号"></el-input>
+                    <el-input v-model="formInline.startId" placeholder="开始编号"></el-input>
                 </el-col>
                 <el-col class="line" :span="2">-</el-col>
                 <el-col :span="11">
-                    <el-input v-model="formInline.user" placeholder="结束编号"></el-input>
+                    <el-input v-model="formInline.endId" placeholder="结束编号"></el-input>
                 </el-col>
             </el-form-item>
             <el-form-item label="上传时间">
@@ -31,8 +31,7 @@
                     unlink-panels
                     range-separator="至"
                     start-placeholder="开始日期"
-                    end-placeholder="结束日期"
-                    :picker-options="pickerOptions2">
+                    end-placeholder="结束日期">
                 </el-date-picker>
               </div>
             </el-form-item>
@@ -58,6 +57,7 @@
 
 <script>
   export default {
+    name: 'PaintList',
     data() {
       return {
         tableData3: [{
@@ -91,35 +91,10 @@
         }],
         multipleSelection: [],
         formInline: {
-          user: '',
-          region: ''
-        },
-        pickerOptions2: {
-          shortcuts: [{
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit('pick', [start, end]);
-            }
-         }]
+          id: '',
+          name: '',
+          startId: '',
+          endId: ''
         },
         value6: '',
         value7: ''

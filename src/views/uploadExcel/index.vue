@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import {getTest} from '@/service/test.js'
 export default {
   name: 'UploadExcel',
   data () {
@@ -54,16 +53,6 @@ export default {
       }
       return isXLSX;
     }
-  },
-  async created(){
-    try{
-      let test = await getTest();
-      console.log(test)
-    }catch(e){
-      console.log(e)
-      this.$message.error(e.error);
-    }
-
   }
 }
 </script>

@@ -13,6 +13,18 @@
           :index="subMenu.route">{{subMenu.title}}</el-menu-item>
         </el-submenu>
     </template>
+    <el-button type="primary" style="margin-top: 14px;float: right" @click="dialogVisible = true">登录</el-button>
+    <el-dialog
+      title="登录"
+      :visible.sync="dialogVisible"
+      width="40%"
+      :before-close="handleClose">
+      <span>这是一段信息</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </el-menu>
 </template>
 
@@ -21,6 +33,7 @@ export default {
   data () {
     return {
       defaultActive: '/uploadExcel',
+      dialogVisible: false,
       menus: [
         {
           title: '上传',
@@ -51,16 +64,31 @@ export default {
           route: 'author',
           children: [
             {
-              title: '上传作者',
-              route: '/uploadAuthor'
-            },
-            {
               title: '作者列表',
               route: '/authorList'
             }
           ]
+        },
+        {
+          title: '最新',
+          route: 'lasted',
+          children: [
+            {
+              title: '最新列表',
+              route: '/lastedList'
+            }
+          ]
         }
       ]
+    }
+  },
+  methods: {
+    handleClose(done) {
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          done();
+        })
+        .catch(_ => {});
     }
   }
 }
