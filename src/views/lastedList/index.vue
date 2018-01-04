@@ -60,7 +60,7 @@
             <el-table-column prop="flag" label="操作" show-overflow-tooltip>
                 <template  slot-scope="scope">
                     <router-link :to="'/lastedDetail/' + scope.row.paint_id">
-                        <el-button>查看详情</el-button>
+                        <el-button type="primary" plain>查看详情</el-button>
                     </router-link>
                 </template>
             </el-table-column>
