@@ -78,6 +78,16 @@ export default {
               route: '/lastedList'
             }
           ]
+        },
+        {
+          title: '最热',
+          route: 'hottest',
+          children: [
+            {
+              title: '最热列表',
+              route: '/hottestList'
+            }
+          ]
         }
       ]
     }

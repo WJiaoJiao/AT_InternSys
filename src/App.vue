@@ -9,6 +9,7 @@
         <router-view/>
       </transition>
     </main>
+    <div style="width: 100%;height: 20px"></div>
   </div>
 </template>
 <script>

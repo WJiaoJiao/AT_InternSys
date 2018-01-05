@@ -6,7 +6,7 @@
 import PaintList from '@/components/PaintList.vue'
 import {getPaintList} from '@/service/paintService.js'
 export default {
-  name: 'lastedList',
+  name: 'hottestList',
   components:{
     'paint-list': PaintList
   },

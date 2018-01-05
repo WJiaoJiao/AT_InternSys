@@ -6,7 +6,8 @@ import uploadImg from '@/views/uploadImg/index.vue'
 import paintingList from '@/views/painting/paintingList.vue'
 import author from '@/views/author/index.vue'
 import lastedList from '@/views/lastedList/index.vue'
-import lastedDetail from '@/views/lastedList/lastedDetail.vue'
+import paintDetail from '@/views/paintDetail/index.vue'
+import hottestList from '@/views/hottestList/index.vue'
 
 Vue.use(Router)
 
@@ -40,9 +41,14 @@ export default new Router({
       component: lastedList
     },
     {
-      path: '/lastedDetail/:paintId',
-      name: 'lastedDetail',
-      component: lastedDetail
+      path: '/paintDetail/:paintId',
+      name: 'paintDetail',
+      component: paintDetail
+    },
+    {
+      path: '/hottestList',
+      name: 'hottestList',
+      component: hottestList
     }
   ]
 })
