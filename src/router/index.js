@@ -8,6 +8,7 @@ import author from '@/views/author/index.vue'
 import lastedList from '@/views/lastedList/index.vue'
 import paintDetail from '@/views/paintDetail/index.vue'
 import hottestList from '@/views/hottestList/index.vue'
+import todayList from '@/views/todayList/index.vue'
 
 Vue.use(Router)
 
@@ -41,7 +42,7 @@ export default new Router({
       component: lastedList
     },
     {
-      path: '/paintDetail/:paintId',
+      path: '/paintDetail/:type/:paintId',
       name: 'paintDetail',
       component: paintDetail
     },
@@ -49,6 +50,11 @@ export default new Router({
       path: '/hottestList',
       name: 'hottestList',
       component: hottestList
+    },
+    {
+      path: '/todayList',
+      name: 'todayList',
+      component: todayList
     }
   ]
 })

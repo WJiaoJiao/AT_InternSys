@@ -7,14 +7,6 @@ instance.defaults.headers = {
   'User-uin': 100000
 }
 
-instance.interceptors.request.use(function (config) {
-  // append api for dev server proxy
-  config.url = '/api' + config.url
-  return config
-}, function (error) {
-  return Promise.reject(error)
-})
-
 instance.interceptors.response.use(function (response) {
   // filter all response
   if (response.status === 200) {

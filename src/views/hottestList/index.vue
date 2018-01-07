@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import * as types from '@/store/types'
 import PaintList from '@/components/PaintList.vue'
 import {getPaintList} from '@/service/paintService.js'
 export default {
@@ -16,9 +17,15 @@ export default {
     }
   },
   methods: {
-    
+
   },
   async created(){
+    this.$store.commit(types.SET_BREADCRUMBS, [{
+      to: {
+        path: '/hottestList'
+      },
+      title: '最热列表'
+    }])
     try{
       let painttListData = await getPaintList(1);
       if(painttListData.paint_arry.length > 0){

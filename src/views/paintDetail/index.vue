@@ -1,10 +1,5 @@
 <template>
     <div class="content">
-      <el-breadcrumb separator-class="el-icon-arrow-right" class="app-breadcrumb">
-        <el-breadcrumb-item>最新</el-breadcrumb-item>
-        <el-breadcrumb-item to="/lastedList">最新列表</el-breadcrumb-item>
-        <el-breadcrumb-item>详情</el-breadcrumb-item>
-      </el-breadcrumb>
       <el-card>
         <el-form ref="form" :model="paintDetail" label-width="100px" label-position="left">
             <el-form-item label="编号">
@@ -53,9 +48,10 @@
                             <el-button type="primary" plain @click="showPic(scope.row.detail_url)">预览</el-button>
                         </template>
                     </el-table-column>
-                    <el-table-column label="缩略图" width="120">
+                    <el-table-column label="缩略图" width="180">
                         <template slot-scope="scope">
                             <el-button type="primary" plain @click="showThumbnail(scope.row.picture_url)">预览</el-button>
+                            <el-button type="primary" plain @click="editPicture(scope.row.detail_url)">修改</el-button>
                         </template>
                     </el-table-column>
                     <el-table-column label="操作">
@@ -71,20 +67,12 @@
                 </div>
             </el-form-item>
         </el-form>
-        <preview-img title="预览封面图片" :visible="originPicVisible" :src="paintDetail.title_detail_url" @close="()=>{this.originPicVisible = false}"></preview-img>
-        <preview-img title="预览封面缩略图片" :visible="thumbnailPicVisible" :src="paintDetail.title_url"  @close="()=>{this.thumbnailPicVisible = false}"></preview-img>
+        <preview-img title="预览封面原图" :visible="originPicVisible" :src="paintDetail.title_detail_url" @close="()=>{this.originPicVisible = false}"></preview-img>
+        <preview-img title="预览封面缩略图" :visible="thumbnailPicVisible" :src="paintDetail.title_url"  @close="()=>{this.thumbnailPicVisible = false}"></preview-img>
         <preview-img title="预览原图" :visible="originVisible" :src="detail_url"  @close="()=>{this.originVisible = false}"></preview-img>
         <preview-img title="预览缩略图" :visible="thumbnailVisible" :src="picture_url"  @close="()=>{this.thumbnailVisible = false}"></preview-img>
-
-        <el-dialog
-          title="修改封面缩略图片"
-          :visible.sync="editThumbnailVisible"
-          width="600px">
-          <div style="display: inline-block">
-            <img id="image" :src="paintDetail.title_detail_url" style="max-width: 100%;width:300px;height:auto"/>
-          </div>
-          <img id="temp"  src="static/logo.png"/>
-        </el-dialog>
+        <upload-thumbnail title="修改封面缩略图" :visible="editThumbnailVisible" :src="paintDetail.title_detail_url" @close="editThumbnailVisible=false" :size="{width: 346,height:210}"></upload-thumbnail>
+        <upload-thumbnail title="修改画作缩略图" :visible="editPictureVisible" :src="detail_url" @close="editPictureVisible=false" :size="{width: 218,height:218}"></upload-thumbnail>
 
         <el-dialog
           title="画作详情"
@@ -119,14 +107,17 @@
 </template>
 
 <script>
-import {getPaintDetail,updatePaint,getPicInfo} from '@/service/paintService.js'
+import * as types from '@/store/types'
+import {getPaintDetail,updatePaint,getPicInfo,uploadThumbnail} from '@/service/paintService.js'
 import Cropper from 'cropperjs'
 import 'cropperjs/dist/cropper.css'
 import PreviewImg from '@/components/PreviewImg.vue'
+import UploadThumbnail from '@/components/UploadThumbnail.vue'
 export default {
   name: 'paintDetail',
   components:{
-    'preview-img': PreviewImg
+    'preview-img': PreviewImg,
+    'upload-thumbnail': UploadThumbnail
   },
   data () {
     return {
@@ -138,9 +129,11 @@ export default {
       originVisible: false,
       thumbnailVisible: false,
       pictureInfoVisible: false,
+      editPictureVisible: false,
       detail_url: '',
       picture_url: '',
-      picture_detail: {}
+      picture_detail: {},
+      cropper: null
     }
   },
   methods: {
@@ -149,18 +142,6 @@ export default {
     },
     editThumbnailPic() {
         this.editThumbnailVisible = true
-        this.$nextTick(_ => {
-            var image = this.$el.querySelector('#image');
-            var cropper = new Cropper(image, {
-            aspectRatio: 16 / 9,
-            viewMode: 3,
-            checkCrossOrigin: false
-            });
-            image.addEventListener('cropend', () => {
-                console.log(this.$el.querySelector('#temp'))
-                this.$el.querySelector('#temp').src = cropper.getCroppedCanvas().toDataURL()
-            });
-        })
     },
     showPic(detail_url) {
         this.originVisible = true
@@ -222,9 +203,36 @@ export default {
         }catch(e){
             this.$message.error(e.error);
         }
-    } 
+    },
+    editPicture(detail_url) {
+      this.editPictureVisible = true
+      this.detail_url = detail_url
+    }
   },
   created() {
+      let type = this.$route.params.type
+      let title = ''
+      if(this.$route.params.type == 'lastedList'){
+        title = '最新列表'
+      }
+      if(this.$route.params.type == 'hottestList'){
+        title = '最热列表'
+      }
+      if(this.$route.params.type == 'todayList'){
+        title =  '今日推荐列表'
+      }
+      this.$store.commit(types.SET_BREADCRUMBS, [
+        {
+          to: {
+            path: '/'+type
+          },
+          title
+        },
+        {
+          title: '详情'
+        }
+      ])
+
       this.getDetail()
   }
 }

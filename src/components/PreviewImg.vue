@@ -4,7 +4,7 @@
         :visible="visible"
         width="340px"
         @close="close">
-        <img :src="src" style="width: 300px;height:auto"/>
+        <img :src="shadowSrc" style="width: 300px;height:auto"/>
     </el-dialog>
 </template>
 
@@ -14,12 +14,30 @@ export default {
   props: ['title','visible','src'],
   data () {
     return {
-      
+      shadowSrc: ''
     }
   },
+  watch: {
+    src () {
+      this.init()
+    },
+    visible () {
+      if (this.visible) {
+        this.init()
+      } else {
+        this.shadowSrc = ''
+      }
+    }
+  },
+  mounted () {
+    this.init()
+  },
   methods: {
+    init () {
+      this.shadowSrc = this.src
+    },
     close() {
-        this.$emit('close');
+      this.$emit('close');
     }
   }
 }

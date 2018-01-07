@@ -71,23 +71,15 @@ export default {
         },
         {
           title: '最新',
-          route: 'lasted',
-          children: [
-            {
-              title: '最新列表',
-              route: '/lastedList'
-            }
-          ]
+          route: '/lastedList'
         },
         {
           title: '最热',
-          route: 'hottest',
-          children: [
-            {
-              title: '最热列表',
-              route: '/hottestList'
-            }
-          ]
+          route: '/hottestList'
+        },
+        {
+          title: '今天推荐',
+          route: '/todayList'
         }
       ]
     }

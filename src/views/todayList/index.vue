@@ -22,12 +22,12 @@ export default {
   async created(){
     this.$store.commit(types.SET_BREADCRUMBS, [{
       to: {
-        path: '/lastedList'
+        path: '/todayList'
       },
-      title: '最新列表'
+      title: '今日推荐列表'
     }])
     try{
-      let painttListData = await getPaintList(1);
+      let painttListData = await getPaintList(3);
       if(painttListData.paint_arry.length > 0){
         this.painttList = painttListData.paint_arry
       }else{

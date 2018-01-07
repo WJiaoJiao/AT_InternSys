@@ -1,9 +1,5 @@
 <template>
     <div class="content">
-      <el-breadcrumb separator-class="el-icon-arrow-right" class="app-breadcrumb">
-        <el-breadcrumb-item>最新</el-breadcrumb-item>
-        <el-breadcrumb-item>最新列表</el-breadcrumb-item>
-      </el-breadcrumb>
       <el-card>
           <div slot="header">
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
@@ -22,7 +18,7 @@
                         <el-input v-model="formInline.endId" placeholder="结束编号"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="上传时间">
+                <!-- <el-form-item label="上传时间">
                 <div style="display:inline-block">
                     <el-date-picker
                         v-model="value7"
@@ -33,8 +29,8 @@
                         start-placeholder="开始日期"
                         end-placeholder="结束日期">
                     </el-date-picker>
-                </div>
-                </el-form-item>
+                </div> -->
+                <!-- </el-form-item> -->
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit">查询</el-button>
                 </el-form-item>
@@ -59,9 +55,7 @@
             </el-table-column>
             <el-table-column prop="flag" label="操作" show-overflow-tooltip>
                 <template  slot-scope="scope">
-                    <router-link :to="'/paintDetail/' + scope.row.paint_id">
-                        <el-button type="primary" plain>查看详情</el-button>
-                    </router-link>
+                  <el-button type="primary" plain @click="showDetail(scope.row.paint_id)">查看详情</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -74,6 +68,7 @@
 </template>
 
 <script>
+import * as types from '@/store/types'
 import {getPaintList,deletePaint} from '@/service/paintService.js'
 export default {
   name: 'PaintList',
@@ -92,6 +87,13 @@ export default {
     }
   },
   methods: {
+    showDetail (id) {
+      let breads = [...this.$store.state.common.breadcrumbs]
+      breads.push({title: '详情'})
+      this.$store.commit(types.SET_BREADCRUMBS, breads)
+      let type = document.location.hash.split('/')[1];
+      this.$router.push({path: `/paintDetail/${type}/${id}`})
+    },
     handleSelectionChange(val) {
         console.log(val)
         this.multipleSelection = val;
@@ -123,7 +125,7 @@ export default {
     }
   },
   async created(){
-
+    console.log(document.location.hash)
   }
 }
 </script>
