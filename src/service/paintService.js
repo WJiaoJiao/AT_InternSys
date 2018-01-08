@@ -18,3 +18,9 @@ export const getPicInfo = (param) => request.get('/api/painting/picture/'+param+
 
 //上传缩略图
 export const uploadThumbnail = (param) => request.post('/test/api/img/upload/capsule',param)
+
+//通过id查询画单
+export const getPaintListById = (param) => request.get('/api/painting/'+param+'/info')
+
+//通过关键词查询画单
+export const getPaintListByKw = (param) => request.get('/op/search/info?kw='+param)

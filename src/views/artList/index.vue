@@ -7,7 +7,7 @@ import * as types from '@/store/types'
 import PaintList from '@/components/PaintList.vue'
 import {getPaintList} from '@/service/paintService.js'
 export default {
-  name: 'hottestList',
+  name: 'artList',
   components:{
     'paint-list': PaintList
   },
@@ -22,12 +22,12 @@ export default {
   async created(){
     this.$store.commit(types.SET_BREADCRUMBS, [{
       to: {
-        path: '/hottestList'
+        path: '/artList'
       },
-      title: '最热列表'
+      title: '艺术先锋列表'
     }])
     try{
-      let painttListData = await getPaintList(1);
+      let painttListData = await getPaintList(4);
       if(painttListData.paint_arry.length > 0){
         this.painttList = painttListData.paint_arry
       }else{

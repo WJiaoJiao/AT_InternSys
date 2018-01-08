@@ -1,89 +1,65 @@
 <template>
     <div class="content">
       <el-card>
-          <div slot="header">
-            <el-form :inline="true" :model="formInline" class="demo-form-inline">
-                <el-form-item label="编号">
-                    <el-input v-model="formInline.id" placeholder="编号"></el-input>
-                </el-form-item>
-                <el-form-item label="标题">
-                    <el-input v-model="formInline.name" placeholder="标题"></el-input>
-                </el-form-item>
-                <el-form-item label="编号号段" style="text-align: center">
-                    <el-col :span="11">
-                        <el-input v-model="formInline.startId" placeholder="开始编号"></el-input>
-                    </el-col>
-                    <el-col class="line" :span="2">-</el-col>
-                    <el-col :span="11">
-                        <el-input v-model="formInline.endId" placeholder="结束编号"></el-input>
-                    </el-col>
-                </el-form-item>
-                <!-- <el-form-item label="上传时间">
-                <div style="display:inline-block">
-                    <el-date-picker
-                        v-model="value7"
-                        type="daterange"
-                        align="right"
-                        unlink-panels
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
-                    </el-date-picker>
-                </div> -->
-                <!-- </el-form-item> -->
-                <el-form-item>
-                    <el-button type="primary" @click="onSubmit">查询</el-button>
-                </el-form-item>
-            </el-form>
-        </div>
-        <el-table stripe border ref="multipleTable" :data="paintList" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
-            <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column label="封面" width="220">
-                <template slot-scope="scope">
-                   <img :src="scope.row.title_url" style="width: 200px;height: auto"/>
-                </template>
-            </el-table-column>
-            <el-table-column prop="paint_id" label="编号" width="120"></el-table-column>
-            <el-table-column prop="paint_title" label="标题" width="120"></el-table-column>
-            <el-table-column prop="read_num" label="阅读数量" width="120"></el-table-column>
-            <el-table-column prop="collect_num" label="收藏数量" width="120"></el-table-column>
-            <el-table-column prop="picture_num" label="作品张数" width="120"></el-table-column>
-            <el-table-column prop="flag" label="是否在首页中展示" width="120">
-                <template slot-scope="scope">
-                   <span>{{scope.row.flag ? scope.row.flag === 1 ? '是' : '不是' : ''}}</span>
-                </template>
-            </el-table-column>
-            <el-table-column prop="flag" label="操作" show-overflow-tooltip>
-                <template  slot-scope="scope">
-                  <el-button type="primary" plain @click="showDetail(scope.row.paint_id)">查看详情</el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-        <div style="margin: 20px 0;text-align: right">
-            <el-button @click="toggleSelection()">取消选择</el-button>
-            <el-button type="danger" @click="deletePaints">删除</el-button>
-        </div>
+            <div slot="header" v-if="isSearch">
+                <el-form :inline="true" :model="formInline" class="demo-form-inline">
+                    <el-form-item label="编号">
+                        <el-input v-model="formInline.id" placeholder="编号"></el-input>
+                    </el-form-item>
+                    <el-form-item label="关键词">
+                        <el-input v-model="formInline.keyWords" placeholder="关键词"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="onSearch">查询</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+            <el-table stripe border ref="multipleTable" :data="paintList" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange" v-if="hasData">
+                <el-table-column type="selection" width="55"></el-table-column>
+                <el-table-column label="封面" width="220">
+                    <template slot-scope="scope">
+                        <img :src="scope.row.title_url" style="width: 200px;height: auto"/>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="paint_id" label="编号" width="120"></el-table-column>
+                <el-table-column prop="paint_title" label="标题" width="120"></el-table-column>
+                <el-table-column prop="read_num" label="阅读数量" width="120"></el-table-column>
+                <el-table-column prop="collect_num" label="收藏数量" width="120"></el-table-column>
+                <el-table-column prop="picture_num" label="作品张数" width="120"></el-table-column>
+                <el-table-column prop="flag" label="是否在首页中展示" width="120">
+                    <template slot-scope="scope">
+                    <span>{{scope.row.flag ? scope.row.flag === 1 ? '是' : '不是' : ''}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="flag" label="操作" show-overflow-tooltip>
+                    <template  slot-scope="scope">
+                    <el-button type="primary" plain @click="showDetail(scope.row.paint_id)">查看详情</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div style="margin: 20px 0;text-align: right" v-if="hasData">
+                <el-button @click="toggleSelection()">取消选择</el-button>
+                <el-button type="danger" @click="deletePaints">删除</el-button>
+            </div>
       </el-card>
     </div>
 </template>
 
 <script>
 import * as types from '@/store/types'
-import {getPaintList,deletePaint} from '@/service/paintService.js'
+import {getPaintList,deletePaint,getPaintListById,getPaintListByKw} from '@/service/paintService.js'
 export default {
   name: 'PaintList',
-  props: ['paintList'],
+  props: ['paintList','isSearch'],
   data () {
     return {
         multipleSelection: [],
         formInline: {
           id: '',
-          name: '',
-          startId: '',
-          endId: '',
+          keyWords: '',
         },
-        value7: '',
-        paint_ids: []
+        paint_ids: [],
+        hasData: false
     }
   },
   methods: {
@@ -121,11 +97,60 @@ export default {
         //     this.$message.warn('请选择需要删除的画单！')
         // }
     },
-    onSubmit(){
+    async onSearch(){
+        this.$emit('setData',[]);
+        let id = this.formInline.id
+        let keyWords = this.formInline.keyWords
+        if(!id && !keyWords){
+            this.$message.warning('请填写查询条件：编号或者关键词！')
+            return
+        }
+        if(id && keyWords){
+            this.$message.warning('编号查询优先！')
+        }
+        if(id){
+            try{
+                let paintListData = await getPaintListById(id)
+                if(paintListData.paint_detail){
+                    this.hasData = true
+                    let paintList = [paintListData.paint_detail]
+                    this.$emit('setData',paintList);
+                }else{
+                    this.$message('没有数据！');
+                }
+            }catch(e){
+                this.$message.error(e.error);
+            }
+            return
+        }
+        if(keyWords){
+            try{
+                let paintListData = await getPaintListByKw(keyWords)
+                if(paintListData.paint_info && paintListData.paint_info.length > 0){
+                    this.hasData = true
+                    let paintList = paintListData.paint_info
+                    this.$emit('setData',paintList);
+                }else{
+                    this.$message('没有数据！');
+                }
+            }catch(e){
+                this.$message.error(e.error);
+            }
+        }
     }
   },
+  watch:{
+      paintList: function(){
+        if(this.paintList.length > 0){
+            this.hasData = true
+        }else{
+            this.hasData = false
+        }
+      }
+  },
   async created(){
-    console.log(document.location.hash)
+    
+    console.log(this.isSearch)
   }
 }
 </script>

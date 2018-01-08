@@ -1,5 +1,5 @@
 <template>
-    <paint-list :paintList="painttList" :isSearch="false"></paint-list>
+    <paint-list :paintList="paintList" :isSearch="true" @setData="setData"></paint-list>
 </template>
 
 <script>
@@ -7,35 +7,27 @@ import * as types from '@/store/types'
 import PaintList from '@/components/PaintList.vue'
 import {getPaintList} from '@/service/paintService.js'
 export default {
-  name: 'hottestList',
+  name: 'normalList',
   components:{
     'paint-list': PaintList
   },
   data () {
     return {
-      painttList: []
+      paintList: []
     }
   },
   methods: {
-
+      setData(paintList) {
+          this.paintList = paintList
+      }
   },
-  async created(){
+  created(){
     this.$store.commit(types.SET_BREADCRUMBS, [{
       to: {
-        path: '/hottestList'
+        path: '/normalList'
       },
-      title: '最热列表'
+      title: '普通画单列表'
     }])
-    try{
-      let painttListData = await getPaintList(1);
-      if(painttListData.paint_arry.length > 0){
-        this.painttList = painttListData.paint_arry
-      }else{
-        this.$message('没有数据！');
-      }
-    }catch(e){
-      this.$message.error(e.error);
-    }
   }
 }
 </script>

@@ -32,7 +32,7 @@
 export default {
   data () {
     return {
-      defaultActive: '/uploadExcel',
+      defaultActive: '/',
       dialogVisible: false,
       menus: [
         {
@@ -70,6 +70,10 @@ export default {
           ]
         },
         {
+          title: '普通画单',
+          route: '/normalList'
+        },
+        {
           title: '最新',
           route: '/lastedList'
         },
@@ -80,6 +84,10 @@ export default {
         {
           title: '今天推荐',
           route: '/todayList'
+        },
+        {
+          title: '艺术先锋',
+          route: '/artList'
         }
       ]
     }
@@ -92,6 +100,25 @@ export default {
         })
         .catch(_ => {});
     }
+  },
+  created() {
+    let path = document.location.hash
+    if(path.indexOf('normalList') > -1){
+      this.defaultActive = '/normalList'
+    }
+    if(path.indexOf('hottestList') > -1){
+      this.defaultActive = '/hottestList'
+    }
+    if(path.indexOf('lastedList') > -1){
+      this.defaultActive = '/lastedList'
+    }
+    if(path.indexOf('artList') > -1){
+      this.defaultActive = '/artList'
+    }
+    if(path.indexOf('todayList') > -1){
+      this.defaultActive = '/todayList'
+    }
+    console.log(document.location.hash)
   }
 }
 </script>

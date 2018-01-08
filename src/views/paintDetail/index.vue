@@ -165,11 +165,9 @@ export default {
     },
     async getPicInfo (picture_id) {
         this.pictureInfoVisible = true
-        console.log(picture_id)
         try{
             let picInfoData = await getPicInfo(picture_id)
             this.picture_detail = picInfoData.picture_detail
-            console.log(picInfoData.picture_detail)
         }catch(e){
             this.$message.error(e.error);
         }
@@ -195,7 +193,6 @@ export default {
         }
         try{
             let updatePaintData = await updatePaint(data);
-            console.log(updatePaintData)
             if(updatePaintData.ret === 0){
                 this.$message.success('修改成功！')
                 this.getDetail()
@@ -212,19 +209,22 @@ export default {
   created() {
       let type = this.$route.params.type
       let title = ''
-      if(this.$route.params.type == 'lastedList'){
+      if(type == 'lastedList'){
         title = '最新列表'
       }
-      if(this.$route.params.type == 'hottestList'){
+      if(type == 'hottestList'){
         title = '最热列表'
       }
-      if(this.$route.params.type == 'todayList'){
+      if(type == 'todayList'){
         title =  '今日推荐列表'
+      }
+      if(type == 'artList'){
+        title =  '艺术先锋列表'
       }
       this.$store.commit(types.SET_BREADCRUMBS, [
         {
           to: {
-            path: '/'+type
+            path: '/' + type
           },
           title
         },

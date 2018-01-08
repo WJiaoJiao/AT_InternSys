@@ -9,6 +9,8 @@ import lastedList from '@/views/lastedList/index.vue'
 import paintDetail from '@/views/paintDetail/index.vue'
 import hottestList from '@/views/hottestList/index.vue'
 import todayList from '@/views/todayList/index.vue'
+import artList from '@/views/artList/index.vue'
+import normalList from '@/views/normalList/index.vue'
 
 Vue.use(Router)
 
@@ -55,6 +57,16 @@ export default new Router({
       path: '/todayList',
       name: 'todayList',
       component: todayList
+    },
+    {
+      path: '/artList',
+      name: 'artList',
+      component: artList
+    },
+    {
+      path: '/normalList',
+      name: 'normalList',
+      component: normalList
     }
   ]
 })

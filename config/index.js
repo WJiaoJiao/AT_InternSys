@@ -21,6 +21,11 @@ module.exports = {
       '/api':{
         changeOrigin: true,
         target: 'http://dev.xiangshuispace.com:9988'
+      },
+      '/op':{
+        logLevel: 'debug',
+        changeOrigin: true,
+        target: 'http://dev.xiangshuispace.com:9988'
       }
     },
 
