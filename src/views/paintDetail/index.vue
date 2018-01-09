@@ -24,7 +24,7 @@
                 <el-input v-model="paintDetail.paint_detail"></el-input>
             </el-form-item>
             <el-form-item label="是否收藏">
-                <el-checkbox v-model="paintDetail.flag" :true-label="2" :false-label="1" disabled></el-checkbox>
+                <el-checkbox v-model="paintDetail.flag" :true-label="1" :false-label="2" disabled></el-checkbox>
             </el-form-item>
             <el-form-item label="封面原图">
                 <el-button type="primary" plain @click="()=>{this.originPicVisible = true}">预览</el-button>
@@ -153,9 +153,14 @@ export default {
     },
     async getDetail(){
         try{
-            let paintDetailData = await getPaintDetail(this.$route.params.paintId)
-            this.paintDetail = paintDetailData.paint_detail
-            this.picture_info = paintDetailData.paint_detail.picture_info
+            let respData = await getPaintDetail(this.$route.params.paintId)
+            if(respData.ret === 0){
+                this.paintDetail = respData.paint_detail
+                this.picture_info = respData.paint_detail.picture_info
+            }else{
+                this.$message.error(resp.err);
+            }
+            
         }catch(e){
             this.$message.error(e.error);
         }
@@ -223,6 +228,9 @@ export default {
       }
       this.$store.commit(types.SET_BREADCRUMBS, [
         {
+            title: '画单分类'
+        },
+        {
           to: {
             path: '/' + type
           },
@@ -232,7 +240,6 @@ export default {
           title: '详情'
         }
       ])
-
       this.getDetail()
   }
 }

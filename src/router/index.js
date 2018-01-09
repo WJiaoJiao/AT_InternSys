@@ -11,6 +11,8 @@ import hottestList from '@/views/hottestList/index.vue'
 import todayList from '@/views/todayList/index.vue'
 import artList from '@/views/artList/index.vue'
 import normalList from '@/views/normalList/index.vue'
+import grandCafeList from '@/views/grandCafeList/index.vue'
+import readWonderList from '@/views/readWonderList/index.vue'
 
 Vue.use(Router)
 
@@ -67,6 +69,16 @@ export default new Router({
       path: '/normalList',
       name: 'normalList',
       component: normalList
+    },
+    {
+      path: '/grandCafeList',
+      name: 'grandCafeList',
+      component: grandCafeList
+    },
+    {
+      path: '/readWonderList',
+      name: 'readWonderList',
+      component: readWonderList
     }
   ]
 })

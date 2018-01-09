@@ -1,0 +1,214 @@
+<template>
+    <div class="content">
+      <el-card>
+            <el-table stripe border ref="multipleTable" :data="classic_quote" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange" v-if="hasData">
+                <el-table-column type="selection" width="55"></el-table-column> 
+                <el-table-column label="图标" width="170">
+                    <template slot-scope="scope">
+                        <img :src="scope.row.cq_img_url" style="width: 150px;height: auto"/>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="cq_id" label="编号" width="120"></el-table-column>
+                <el-table-column prop="cq_title" label="标题" width="200"></el-table-column>
+                <el-table-column prop="cq_content" label="简介" width="250"></el-table-column>
+                <el-table-column label="h5链接地址" width="120">
+                    <template slot-scope="scope">
+                        <el-tooltip class="item" effect="dark" :content="scope.row.cq_h5_url" placement="top-start">
+                            <el-button @click="openUrl(scope.row.cq_h5_url)">点击查看</el-button>
+                        </el-tooltip>
+                    </template>
+                </el-table-column>
+                <el-table-column label="是否在首页中展示" width="120">
+                    <template slot-scope="scope">
+                        <span>{{scope.row.flag ? scope.row.flag === 1 ? '是' : '否' : ''}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" show-overflow-tooltip>
+                    <template  slot-scope="scope">
+                        <el-button type="primary" plain @click="editAction(scope.row)">修改</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div style="margin: 20px 0;text-align: right" v-if="hasData">
+                <el-button @click="toggleSelection()">取消选择</el-button>
+                <el-button type="primary" @click="homeShowAction">设置在首页中显示</el-button>
+                <el-button type="danger" @click="deleteGrandCafes">删除</el-button>
+            </div>
+            <el-dialog
+                title="修改"
+                :visible.sync="editVisible"
+                width="50%">
+                <el-form label-position="left" label-width="140px" :model="cq_detail">
+                    <el-form-item label="编号">
+                        <el-input v-model="cq_detail.cq_id" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item label="标题">
+                        <el-input v-model="cq_detail.cq_title"></el-input>
+                    </el-form-item>
+                    <el-form-item label="简介">
+                        <el-input type="textarea" v-model="cq_detail.cq_content"></el-input>
+                    </el-form-item>
+                    <el-form-item label="h5链接地址">
+                        <el-input v-model="cq_detail.cq_h5_url"></el-input>
+                    </el-form-item>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="primary" @click="saveAction">保存</el-button>
+                </span>
+            </el-dialog>
+      </el-card>
+    </div>
+</template>
+
+<script>
+import * as types from '@/store/types'
+import {getReadWonderList,setPoineerCq} from '@/service/paintService.js'
+export default {
+  name: 'GrandCafeList',
+  data () {
+    return {
+        multipleSelection: [],
+        cq_ids: [],
+        hasData: false,
+        classic_quote: [],
+        editVisible: false,
+        cq_detail: {}
+    }
+  },
+  methods: {
+    showDetail (id) {
+      let breads = [...this.$store.state.common.breadcrumbs]
+      breads.push({title: '详情'})
+      this.$store.commit(types.SET_BREADCRUMBS, breads)
+      let type = document.location.hash.split('/')[1];
+      this.$router.push({path: `/paintDetail/${type}/${id}`})
+    },
+    handleSelectionChange(val) {
+        this.multipleSelection = val;
+        let cq_ids = [];
+        for(let v of val){
+            cq_ids.push(v.cq_id)
+        }
+        this.cq_ids = cq_ids
+    },
+    toggleSelection(rows) {
+        this.$refs.multipleTable.clearSelection()
+    },
+    editAction(cq_detail) {
+        this.cq_detail = cq_detail
+        this.editVisible = true
+    },
+    async getReadWonderList() {
+        try{
+            let respData = await getReadWonderList()
+            if(respData.ret === 0){
+                if(respData.classic_quote && respData.classic_quote.length > 0){
+                    this.classic_quote = respData.classic_quote
+                }else{
+                    this.$message('没有数据！')
+                }
+            }else{
+                this.$message.error(respData.err);
+            }
+        }catch(e){
+            this.$message.error(e.error);
+        }
+    },
+    async saveAction() {
+        if(!this.cq_detail.cq_title){
+            this.$message.warning('请填写标题！')
+            return
+        }
+        if(!this.cq_detail.cq_content){
+            this.$message.warning('请填写简介！')
+            return
+        }
+        if(!this.cq_detail.cq_h5_url){
+            this.$message.warning('请填写H5链接地址！')
+            return
+        }
+        try{
+            let respData = await updateGrandCafe(this.mq_detail)
+            if(respData.ret === 0){
+                this.$message.success('保存成功！')
+                this.editVisible = false
+                this.getGrandCafeList()
+            }else{
+                this.$message.error(respData.err)
+            }
+        }catch(e){
+            this.$message.error(e.error)
+        }
+    },
+    async homeShowAction() {
+        console.log(this.cq_ids)
+        if(this.cq_ids.length < 2){
+            this.$message.warning('至少设置两条数据！')
+            return
+        }
+        try{
+            let respData = await setPoineerCq({cq_ids: this.cq_ids})
+            if(respData.ret === 0){
+                this.$message.success('设置成功')
+            }else{
+                this.$message.error(respData.err)
+            }
+        }catch(e){
+            this.$message.error(e.error)
+        }
+    },
+    deleteGrandCafes() {
+        console.log(this.mq_ids)
+        var that = this
+        if(this.mq_ids.length > 10){
+            this.$message.warning('一次最多删除10条数据！')
+            return
+        }
+        if(this.mq_ids.length === 0){
+            this.$message.warning('请勾选所要删除的数据！')
+            return
+        }
+        this.$alert('您确定要删除吗？', '提示', {
+          confirmButtonText: '确定',
+          callback: async action => {
+            // try{
+            //     let respData = await deleteGrandCafe(that.mq_ids)
+            //     if(respData.ret === 0){
+            //         that.$message.success('删除成功！')
+            //     }else{
+            //         that.$message.error(respData.err)
+            //     }
+            // }catch(e){
+            //     this.$message.error(e.error)
+            // }
+          }
+        });
+    },
+    openUrl(cq_h5_url) {
+        window.open(cq_h5_url)
+    }
+  },
+  async created(){
+      this.$store.commit(types.SET_BREADCRUMBS, [
+        {
+            title: '读精彩列表'
+        }]
+      )
+      this.getReadWonderList()
+  },
+  watch: {
+      classic_quote: function() {
+          if(this.classic_quote.length > 0){
+              this.hasData = true
+          }else{
+              this.hasData = false
+          }
+      }
+  }
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="less">
+
+</style>

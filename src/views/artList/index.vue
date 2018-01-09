@@ -20,12 +20,17 @@ export default {
 
   },
   async created(){
-    this.$store.commit(types.SET_BREADCRUMBS, [{
-      to: {
-        path: '/artList'
+    this.$store.commit(types.SET_BREADCRUMBS, [
+      {
+        title: '画单分类'
       },
-      title: '艺术先锋列表'
-    }])
+      {
+        to: {
+          path: '/artList'
+        },
+        title: '艺术先锋Banner列表'
+      }
+    ])
     try{
       let painttListData = await getPaintList(4);
       if(painttListData.paint_arry.length > 0){

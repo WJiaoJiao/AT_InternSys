@@ -74,21 +74,51 @@ export default {
           route: '/normalList'
         },
         {
-          title: '最新',
-          route: '/lastedList'
+          title: '画单分类',
+          route: 'paintClassify',
+          children: [
+            {
+              title: '最新',
+              route: '/lastedList'
+            },
+            {
+              title: '最热',
+              route: '/hottestList'
+            },
+            {
+              title: '今日推荐Banner',
+              route: '/todayList'
+            },
+            {
+              title: '艺术先锋Banner',
+              route: '/artList'
+            }
+          ]
         },
         {
-          title: '最热',
-          route: '/hottestList'
+          title: '大咖说',
+          route: '/grandCafeList'
         },
         {
-          title: '今天推荐',
-          route: '/todayList'
-        },
-        {
-          title: '艺术先锋',
-          route: '/artList'
+          title: '读精彩',
+          route: '/readWonderList'
         }
+        // {
+        //   title: '最新',
+        //   route: '/lastedList'
+        // },
+        // {
+        //   title: '最热',
+        //   route: '/hottestList'
+        // },
+        // {
+        //   title: '今天推荐',
+        //   route: '/todayList'
+        // },
+        // {
+        //   title: '艺术先锋',
+        //   route: '/artList'
+        // }
       ]
     }
   },
@@ -117,6 +147,12 @@ export default {
     }
     if(path.indexOf('todayList') > -1){
       this.defaultActive = '/todayList'
+    }
+    if(path.indexOf('grandCafeList') > -1){
+      this.defaultActive = '/grandCafeList'
+    }
+    if(path.indexOf('readWonderList') > -1){
+      this.defaultActive = '/readWonderList'
     }
     console.log(document.location.hash)
   }
