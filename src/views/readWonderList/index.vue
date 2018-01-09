@@ -2,7 +2,7 @@
     <div class="content">
       <el-card>
             <el-table stripe border ref="multipleTable" :data="classic_quote" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange" v-if="hasData">
-                <el-table-column type="selection" width="55"></el-table-column> 
+                <el-table-column type="selection" width="55"></el-table-column>
                 <el-table-column label="图标" width="170">
                     <template slot-scope="scope">
                         <img :src="scope.row.cq_img_url" style="width: 150px;height: auto"/>
@@ -129,60 +129,56 @@ export default {
         }
         try{
             let respData = await updateGrandCafe(this.mq_detail)
-            if(respData.ret === 0){
-                this.$message.success('保存成功！')
-                this.editVisible = false
-                this.getGrandCafeList()
-            }else{
-                this.$message.error(respData.err)
-            }
+            this.$message.success('保存成功！')
+            this.editVisible = false
+            this.getGrandCafeList()
         }catch(e){
-            this.$message.error(e.error)
+            this.$message.error(e.err)
         }
     },
     async homeShowAction() {
         console.log(this.cq_ids)
-        if(this.cq_ids.length < 2){
-            this.$message.warning('至少设置两条数据！')
+        if(this.cq_ids.length != 2){
+            this.$message.warning('必须设置两条数据！')
             return
         }
         try{
             let respData = await setPoineerCq({cq_ids: this.cq_ids})
-            if(respData.ret === 0){
-                this.$message.success('设置成功')
-            }else{
-                this.$message.error(respData.err)
-            }
+            this.$message.success('设置成功')
+            this.cq_ids = []
+            this.getReadWonderList()
         }catch(e){
-            this.$message.error(e.error)
+            this.$message.error(e.err)
         }
     },
-    deleteGrandCafes() {
-        console.log(this.mq_ids)
+    async deleteGrandCafes() {
+        console.log(this.cq_ids)
         var that = this
-        if(this.mq_ids.length > 10){
+        if(this.cq_ids.length > 10){
             this.$message.warning('一次最多删除10条数据！')
             return
         }
-        if(this.mq_ids.length === 0){
+        if(this.cq_ids.length === 0){
             this.$message.warning('请勾选所要删除的数据！')
             return
         }
-        this.$alert('您确定要删除吗？', '提示', {
-          confirmButtonText: '确定',
-          callback: async action => {
-            // try{
-            //     let respData = await deleteGrandCafe(that.mq_ids)
-            //     if(respData.ret === 0){
-            //         that.$message.success('删除成功！')
-            //     }else{
-            //         that.$message.error(respData.err)
-            //     }
-            // }catch(e){
-            //     this.$message.error(e.error)
-            // }
-          }
-        });
+
+        try{
+            await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning',
+              center: true
+            })
+          // let respData = await deleteGrandCafe(that.mq_ids)
+          // if(respData.ret === 0){
+          //     that.$message.success('删除成功！')
+          // }else{
+          //     that.$message.error(respData.err)
+          // }
+        }catch(e){
+            if (e != 'cancel') {this.$message.error(e.error)}
+        }
     },
     openUrl(cq_h5_url) {
         window.open(cq_h5_url)

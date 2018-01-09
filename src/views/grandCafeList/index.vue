@@ -4,13 +4,13 @@
             <el-table stripe border ref="multipleTable" :data="mq_list" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange" v-if="hasData">
                 <el-table-column type="selection" width="55"></el-table-column>
                 <el-table-column prop="mq_id" label="编号" width="120"></el-table-column>
-                <el-table-column prop="mq_content" label="内容" width="500"></el-table-column>
+                <el-table-column prop="mq_content" label="内容" ></el-table-column>
                 <el-table-column label="是否在首页中展示" width="120">
                     <template slot-scope="scope">
                     <span>{{scope.row.flag ? scope.row.flag === 1 ? '是' : '否' : ''}}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" show-overflow-tooltip>
+                <el-table-column label="操作" show-overflow-tooltip width="80">
                     <template  slot-scope="scope">
                         <el-button type="primary" plain @click="editAction(scope.row)">修改</el-button>
                     </template>
@@ -143,7 +143,7 @@ export default {
             // }
           }
         });
-        
+
     }
   },
   async created(){
