@@ -93,11 +93,11 @@ export default {
     async deletePaints() {
         if(this.type == 'normal'){
             if(this.paint_ids.length === 0){
-                this.$message.warn('请选择需要删除的画单！')
+                this.$message.warning('请选择需要删除的画单！')
                 return
             }
             if(this.paint_ids.length > 10){
-                this.$message.warn('一次最多删除10条数据！')
+                this.$message.warning('一次最多删除10条数据！')
                 return
             }
             try{
@@ -107,9 +107,10 @@ export default {
                     type: 'warning',
                     center: true
                 })
+                console.log('111111')
                 // let respData = await deleteNormalPaint(this.paint_ids)
                 this.$message.success('删除成功')
-                // this.getReadWonderList()
+                this.onSearch()
             }catch(e){
                 if (e != 'cancel') {this.$message.error(e.err)}
             }
@@ -121,9 +122,10 @@ export default {
                     type: 'warning',
                     center: true
                 })
+                console.log('222222')
                 // let deletePaint = await deletePaint(this.paint_ids);
                 this.$message.success('删除成功')
-                // this.getReadWonderList()
+                // this.$emit('setSuccess')
             }catch(e){
                 if (e != 'cancel') {this.$message.error(e.err)}
             }
@@ -187,9 +189,9 @@ export default {
         console.log(data)
         try{
             let respData = await setPaintList(data);
-            this.$message.success('设置成功！');
+            this.$message.success('设置成功！')
             this.paint_ids = []
-            this.$emit('setHomeSuccess');
+            this.$emit('setSuccess')
             console.log(respData)
         }catch(e){
             this.$message.error(e.err);

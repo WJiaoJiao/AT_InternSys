@@ -1,5 +1,5 @@
 <template>
-    <paint-list :paintList="painttList" :isSearch="false" type="4" @setHomeSuccess="setHomeSuccess"></paint-list>
+    <paint-list :paintList="painttList" :isSearch="false" type="4" @setSuccess="setSuccess"></paint-list>
 </template>
 
 <script>
@@ -29,7 +29,7 @@ export default {
         this.$message.error(e.error);
       }
     },
-    setHomeSuccess() {
+    setSuccess() {
       this.getPaintList()
     }
   },
