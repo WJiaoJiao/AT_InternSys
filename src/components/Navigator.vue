@@ -154,7 +154,6 @@ export default {
     if(path.indexOf('readWonderList') > -1){
       this.defaultActive = '/readWonderList'
     }
-    console.log(document.location.hash)
   }
 }
 </script>

@@ -1,8 +1,8 @@
 <template>
     <div class="content">
       <el-card>
-        <el-form ref="form" :model="paintDetail" label-width="100px" label-position="left">
-            <el-form-item label="编号">
+        <el-form ref="form" :model="paintDetail" label-width="130px" label-position="left">
+            <el-form-item label="画单ID">
                 <el-input v-model="paintDetail.paint_id" disabled></el-input>
             </el-form-item>
             <el-form-item label="浏览数量">
@@ -22,9 +22,6 @@
             </el-form-item>
             <el-form-item label="详细描述">
                 <el-input v-model="paintDetail.paint_detail"></el-input>
-            </el-form-item>
-            <el-form-item label="是否收藏">
-                <el-checkbox v-model="paintDetail.flag" :true-label="1" :false-label="2" disabled></el-checkbox>
             </el-form-item>
             <el-form-item label="封面原图">
                 <el-button type="primary" plain @click="()=>{this.originPicVisible = true}">预览</el-button>
@@ -154,15 +151,10 @@ export default {
     async getDetail(){
         try{
             let respData = await getPaintDetail(this.$route.params.paintId)
-            if(respData.ret === 0){
-                this.paintDetail = respData.paint_detail
-                this.picture_info = respData.paint_detail.picture_info
-            }else{
-                this.$message.error(resp.err);
-            }
-            
+            this.paintDetail = respData.paint_detail
+            this.picture_info = respData.paint_detail.picture_info
         }catch(e){
-            this.$message.error(e.error);
+            this.$message.error(e.err);
         }
     },
     addPic () {
@@ -174,7 +166,7 @@ export default {
             let picInfoData = await getPicInfo(picture_id)
             this.picture_detail = picInfoData.picture_detail
         }catch(e){
-            this.$message.error(e.error);
+            this.$message.error(e.err);
         }
     },
     async save() {
@@ -198,12 +190,10 @@ export default {
         }
         try{
             let updatePaintData = await updatePaint(data);
-            if(updatePaintData.ret === 0){
-                this.$message.success('修改成功！')
-                this.getDetail()
-            }
+            this.$message.success('修改成功！')
+            this.getDetail()
         }catch(e){
-            this.$message.error(e.error);
+            this.$message.error(e.err);
         }
     },
     editPicture(detail_url) {

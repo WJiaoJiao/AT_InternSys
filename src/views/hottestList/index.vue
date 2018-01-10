@@ -1,5 +1,5 @@
 <template>
-    <paint-list :paintList="painttList" :isSearch="false"></paint-list>
+    <paint-list :paintList="painttList" :isSearch="false" type="3" @setHomeSuccess="setHomeSuccess"></paint-list>
 </template>
 
 <script>
@@ -17,7 +17,21 @@ export default {
     }
   },
   methods: {
-
+    async getPaintList() {
+      try{
+        let painttListData = await getPaintList(3);
+        if(painttListData.paint_arry.length > 0){
+          this.painttList = painttListData.paint_arry
+        }else{
+          this.$message('没有数据！');
+        }
+      }catch(e){
+        this.$message.error(e.err);
+      }
+    },
+    setHomeSuccess() {
+      this.getPaintList()
+    }
   },
   async created(){
     this.$store.commit(types.SET_BREADCRUMBS, [
@@ -31,16 +45,7 @@ export default {
         title: '最热列表'
       }
     ])
-    try{
-      let painttListData = await getPaintList(1);
-      if(painttListData.paint_arry.length > 0){
-        this.painttList = painttListData.paint_arry
-      }else{
-        this.$message('没有数据！');
-      }
-    }catch(e){
-      this.$message.error(e.error);
-    }
+    this.getPaintList()
   }
 }
 </script>

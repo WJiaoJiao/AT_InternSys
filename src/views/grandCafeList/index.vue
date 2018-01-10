@@ -3,14 +3,14 @@
       <el-card>
             <el-table stripe border ref="multipleTable" :data="mq_list" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange" v-if="hasData">
                 <el-table-column type="selection" width="55"></el-table-column>
-                <el-table-column prop="mq_id" label="编号" width="120"></el-table-column>
+                <el-table-column prop="mq_id" label="编号" width="100"></el-table-column>
                 <el-table-column prop="mq_content" label="内容" ></el-table-column>
                 <el-table-column label="是否在首页中展示" width="120">
                     <template slot-scope="scope">
                     <span>{{scope.row.flag ? scope.row.flag === 1 ? '是' : '否' : ''}}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" show-overflow-tooltip width="80">
+                <el-table-column label="操作" show-overflow-tooltip width="100">
                     <template  slot-scope="scope">
                         <el-button type="primary" plain @click="editAction(scope.row)">修改</el-button>
                     </template>
@@ -85,17 +85,13 @@ export default {
     async getGrandCafeList() {
         try{
             let respData = await getGrandCafeList()
-            if(respData.ret === 0){
-                if(respData.mq_list && respData.mq_list.length > 0){
-                    this.mq_list = respData.mq_list
-                }else{
-                    this.$message('没有数据！')
-                }
+            if(respData.mq_list && respData.mq_list.length > 0){
+                this.mq_list = respData.mq_list
             }else{
-                this.$message.error(respData.err);
+                this.$message('没有数据！')
             }
         }catch(e){
-            this.$message.error(e.error);
+            this.$message.error(e.err);
         }
     },
     async saveAction() {
@@ -106,15 +102,11 @@ export default {
         }
         try{
             let respData = await updateGrandCafe(this.mq_detail)
-            if(respData.ret === 0){
-                this.$message.success('保存成功！')
-                this.editVisible = false
-                this.getGrandCafeList()
-            }else{
-                this.$message.error(respData.err)
-            }
+            this.$message.success('保存成功！')
+            this.editVisible = false
+            this.getGrandCafeList()
         }catch(e){
-            this.$message.error(e.error)
+            this.$message.error(e.err)
         }
     },
     deleteGrandCafes() {
@@ -131,16 +123,12 @@ export default {
         this.$alert('您确定要删除吗？', '提示', {
           confirmButtonText: '确定',
           callback: async action => {
-            // try{
-            //     let respData = await deleteGrandCafe(that.mq_ids)
-            //     if(respData.ret === 0){
-            //         that.$message.success('删除成功！')
-            //     }else{
-            //         that.$message.error(respData.err)
-            //     }
-            // }catch(e){
-            //     this.$message.error(e.error)
-            // }
+            try{
+                let respData = await deleteGrandCafe(that.mq_ids)
+                that.$message.success('删除成功！')
+            }catch(e){
+                this.$message.error(e.err)
+            }
           }
         });
 

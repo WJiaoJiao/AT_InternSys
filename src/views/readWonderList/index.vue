@@ -8,10 +8,10 @@
                         <img :src="scope.row.cq_img_url" style="width: 150px;height: auto"/>
                     </template>
                 </el-table-column>
-                <el-table-column prop="cq_id" label="编号" width="120"></el-table-column>
+                <el-table-column prop="cq_id" label="编号" width="100"></el-table-column>
                 <el-table-column prop="cq_title" label="标题" width="200"></el-table-column>
-                <el-table-column prop="cq_content" label="简介" width="250"></el-table-column>
-                <el-table-column label="h5链接地址" width="120">
+                <el-table-column prop="cq_content" label="简介"></el-table-column>
+                <el-table-column label="h5链接地址" width="100">
                     <template slot-scope="scope">
                         <el-tooltip class="item" effect="dark" :content="scope.row.cq_h5_url" placement="top-start">
                             <el-button @click="openUrl(scope.row.cq_h5_url)">点击查看</el-button>
@@ -23,7 +23,7 @@
                         <span>{{scope.row.flag ? scope.row.flag === 1 ? '是' : '否' : ''}}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" show-overflow-tooltip>
+                <el-table-column label="操作" show-overflow-tooltip width="100">
                     <template  slot-scope="scope">
                         <el-button type="primary" plain @click="editAction(scope.row)">修改</el-button>
                     </template>
@@ -31,12 +31,15 @@
             </el-table>
             <div style="margin: 20px 0;text-align: right" v-if="hasData">
                 <el-button @click="toggleSelection()">取消选择</el-button>
-                <el-button type="primary" @click="homeShowAction">设置在首页中显示</el-button>
+                <el-tooltip class="item" effect="dark" content="必须设置两条数据！" placement="top-start">
+                    <el-button type="primary" @click="homeShowAction">设置在首页中显示</el-button>
+                </el-tooltip>
                 <el-button type="danger" @click="deleteGrandCafes">删除</el-button>
             </div>
             <el-dialog
                 title="修改"
                 :visible.sync="editVisible"
+                @close="close"
                 width="50%">
                 <el-form label-position="left" label-width="140px" :model="cq_detail">
                     <el-form-item label="编号">
@@ -62,7 +65,7 @@
 
 <script>
 import * as types from '@/store/types'
-import {getReadWonderList,setPoineerCq} from '@/service/paintService.js'
+import {getReadWonderList,setPoineerCq,setCqList,deleteCqList} from '@/service/paintService.js'
 export default {
   name: 'GrandCafeList',
   data () {
@@ -72,7 +75,7 @@ export default {
         hasData: false,
         classic_quote: [],
         editVisible: false,
-        cq_detail: {}
+        cq_detail: {},
     }
   },
   methods: {
@@ -101,17 +104,13 @@ export default {
     async getReadWonderList() {
         try{
             let respData = await getReadWonderList()
-            if(respData.ret === 0){
-                if(respData.classic_quote && respData.classic_quote.length > 0){
-                    this.classic_quote = respData.classic_quote
-                }else{
-                    this.$message('没有数据！')
-                }
+            if(respData.classic_quote && respData.classic_quote.length > 0){
+                this.classic_quote = respData.classic_quote
             }else{
-                this.$message.error(respData.err);
+                this.$message('没有数据！')
             }
         }catch(e){
-            this.$message.error(e.error);
+            this.$message.error(e.err);
         }
     },
     async saveAction() {
@@ -127,11 +126,17 @@ export default {
             this.$message.warning('请填写H5链接地址！')
             return
         }
+        let data = {
+            cq_id: this.cq_detail.cq_id,
+            cq_title: this.cq_detail.cq_title,
+            cq_content: this.cq_detail.cq_content,
+            cq_h5_url: this.cq_detail.cq_h5_url
+        }
         try{
-            let respData = await updateGrandCafe(this.mq_detail)
+            let respData = await setCqList(data)
             this.$message.success('保存成功！')
             this.editVisible = false
-            this.getGrandCafeList()
+            this.getReadWonderList()
         }catch(e){
             this.$message.error(e.err)
         }
@@ -162,7 +167,6 @@ export default {
             this.$message.warning('请勾选所要删除的数据！')
             return
         }
-
         try{
             await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
               confirmButtonText: '确定',
@@ -170,18 +174,18 @@ export default {
               type: 'warning',
               center: true
             })
-          // let respData = await deleteGrandCafe(that.mq_ids)
-          // if(respData.ret === 0){
-          //     that.$message.success('删除成功！')
-          // }else{
-          //     that.$message.error(respData.err)
-          // }
+        //   let respData = await deleteCqList(that.cq_ids)
+          that.$message.success('删除成功！')
+          this.getReadWonderList()
         }catch(e){
-            if (e != 'cancel') {this.$message.error(e.error)}
+            if (e != 'cancel') {this.$message.error(e.err)}
         }
     },
     openUrl(cq_h5_url) {
         window.open(cq_h5_url)
+    },
+    close() {
+        this.getReadWonderList()
     }
   },
   async created(){

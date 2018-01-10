@@ -39,3 +39,15 @@ export const getReadWonderList = (param) => request.get('/api/discovery/get_cq_l
 
 // 设置艺术先锋页面显示读精彩
 export const setPoineerCq = (param) => request.post('/op/discovery/set_poineer_cq', param)
+
+// 修改读精彩
+export const setCqList = (param) => request.post('/op/discovery/set_cq_list', param)
+
+// 删除读精彩
+export const deleteCqList= (param) => request.post('/api/discovery/delete_cq_list', param)
+
+// 设置今日推荐最新，最热的显示。今日推荐banner，艺术先锋
+export const setPaintList= (param) => request.post('/op/discovery/set_paint_list', param)
+
+// 普通画单删除
+export const deleteNormalPaint= (param) => request.post('/api/painting/delete_list', param)

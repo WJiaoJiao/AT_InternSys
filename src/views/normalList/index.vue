@@ -1,5 +1,5 @@
 <template>
-    <paint-list :paintList="paintList" :isSearch="true" @setData="setData"></paint-list>
+    <paint-list :paintList="paintList" :isSearch="true" @setData="setData" type="normal"></paint-list>
 </template>
 
 <script>
