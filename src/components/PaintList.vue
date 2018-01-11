@@ -271,17 +271,14 @@ export default {
         }
     },
     checkNumber(theObj) {
-        var reg = /^[0-9]+.?[0-9]*$/;
-        if (reg.test(theObj)) {
-            return true;
-        }
-        return false;
+        return (theObj*1) == (theObj*1)
     },
     closeDialogAction() {
         this.$nextTick(function() {
             this.$refs.addPaintForm.resetFields();
             this.addPaintIds = []
             this.add_paint_ids = []
+            this.addPaintId = ''
         })
     }
   },

@@ -54,3 +54,6 @@ export const setPaintList= (param) => request.post('/op/discovery/set_paint_list
 
 // 画单添加到最新,最热列表中
 export const addPaintList= (param) => request.post('/op/discovery/add_paint_list', param)
+
+// 画单添加,删除画作
+export const addDeletePaint= (param) => request.post('/op/painting/add_delete_paint', param)

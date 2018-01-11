@@ -32,7 +32,8 @@
                 <el-button type="primary" plain @click="editThumbnailPic()">修改</el-button>
             </el-form-item>
             <el-form-item label="画作信息">
-                <el-table :data="picture_info" border style="width: 100%">
+                <el-table :data="picture_info" border style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange">
+                    <el-table-column type="selection" width="55"></el-table-column>
                     <el-table-column prop="picture_id" label="编号" width="80">
                     </el-table-column>
                     <el-table-column prop="picture_type" label="类型" width="80">
@@ -54,12 +55,14 @@
                     <el-table-column label="操作">
                         <template slot-scope="scope">
                             <el-button type="primary" plain @click="getPicInfo(scope.row.picture_id)">详情</el-button>
-                            <el-button type="danger" plain>删除</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
                 <div style="margin-top: 20px;text-align: right">
                     <el-button type="primary" @click="addPic">添加画作</el-button>
+                    <el-button type="danger" @click="deletePic">删除画作</el-button>
+                </div>
+                <div style="margin-top: 20px;text-align: right">
                     <el-button type="primary" @click="save">保存</el-button>
                 </div>
             </el-form-item>
@@ -99,13 +102,35 @@
                 </el-form-item>
             </el-form>
         </el-dialog>
+
+        <el-dialog title="添加画单" :visible.sync="addPictureVisible" width="440px" @close="closeDialogAction">
+              <el-form :inline="true" class="demo-form-inline" ref="addPictureForm">
+                  <el-form-item label="画单ID" label-width="120px">
+                      <el-input v-model="addPictureId"></el-input>
+                  </el-form-item>
+                  <el-form-item>
+                      <el-button type="primary" @click="confirmPictureId" :disabled="confirmAddDis">确认</el-button>
+                  </el-form-item>
+              </el-form>
+              <el-table :data="addPictureIds">
+                  <el-table-column property="add_picture_id" label="画单ID" width="350"></el-table-column>
+                  <el-table-column  property="add_picture_id" label="删除">
+                      <template slot-scope="scope">
+                          <i class="el-icon-close" style="font-size: 20px" @click="deleteAddPicture(scope.row.add_picture_id)"></i>
+                      </template>
+                  </el-table-column>
+              </el-table>
+               <span slot="footer" class="dialog-footer">
+                  <el-button type="primary" @click="addPictureAction" :disabled="addButtonDis">添 加</el-button>
+              </span>
+          </el-dialog>
       </el-card>
     </div>
 </template>
 
 <script>
 import * as types from '@/store/types'
-import {getPaintDetail,updatePaint,getPicInfo,uploadThumbnail} from '@/service/paintService.js'
+import {getPaintDetail,updatePaint,getPicInfo,uploadThumbnail,addDeletePaint} from '@/service/paintService.js'
 import Cropper from 'cropperjs'
 import 'cropperjs/dist/cropper.css'
 import PreviewImg from '@/components/PreviewImg.vue'
@@ -118,6 +143,7 @@ export default {
   },
   data () {
     return {
+      multipleSelection: [],
       paintDetail: {},
       picture_info: [],
       originPicVisible: false,
@@ -130,7 +156,14 @@ export default {
       detail_url: '',
       picture_url: '',
       picture_detail: {},
-      cropper: null
+      cropper: null,
+      picture_ids: [],
+      addPictureVisible: false,
+      addPictureId: '',
+      confirmAddDis: true,
+      addPictureIds: [],
+      addButtonDis: true,
+      add_picture_ids: []
     }
   },
   methods: {
@@ -158,7 +191,7 @@ export default {
         }
     },
     addPic () {
-
+      this.addPictureVisible = true
     },
     async getPicInfo (picture_id) {
         this.pictureInfoVisible = true
@@ -199,6 +232,107 @@ export default {
     editPicture(detail_url) {
       this.editPictureVisible = true
       this.detail_url = detail_url
+    },
+    handleSelectionChange(val) {
+        this.multipleSelection = val;
+        let picture_ids = [];
+        for(let v of val){
+            picture_ids.push(v.picture_id)
+        }
+        this.picture_ids = picture_ids
+        console.log(this.picture_ids)
+    },
+    async deletePic() {
+      if(this.picture_ids.length === 0){
+        this.message.warning('请勾选至少一条数据！')
+        return
+      }
+      try{
+          await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning',
+              center: true
+          })
+          let data = {
+            paint_id: Number(this.$route.params.paintId),
+            opr: 2,
+            picture_ids: this.picture_ids
+          }
+          let respData = await addDeletePaint(data)
+          this.$message.success('删除成功')
+          this.getDetail()
+      }catch(e){
+          if (e != 'cancel') {this.$message.error(e.err)}
+      }
+    },
+    closeDialogAction() {
+        this.$nextTick(function() {
+            this.$refs.addPictureForm.resetFields();
+            this.picture_ids = []
+            this.addPictureId = ''
+            this.addPictureIds = []
+            this.add_picture_ids = []
+        })
+    },
+    deleteAddPicture(delete_picture_id) {
+        _.remove(this.addPictureIds, (item)=> {
+            return item.add_picture_id == delete_picture_id;
+        })
+        _.remove(this.add_picture_ids, (item)=> {
+            return item == delete_picture_id;
+        })
+        this.addPictureIds = [...this.addPictureIds]
+        this.add_picture_ids = [...this.add_picture_ids]
+    },
+    async addPictureAction() {
+        let data = {
+            paint_id: Number(this.$route.params.paintId),
+            opr: 1,
+            picture_ids: this.add_picture_ids
+        }
+        try{
+            let respData = await addDeletePaint(data)
+            this.$message.success('添加成功！')
+            this.addPictureVisible = false
+            this.getDetail()
+        }catch(e){
+            this.$message.error(e.err)
+        }
+    },
+    confirmPictureId() {
+      for(let i = 0; i < this.addPictureIds.length; i++){
+          if(this.addPictureId == this.addPictureIds[i].add_picture_id){
+              this.$message.warning('请不要重复添加！')
+              return
+          }
+      }
+      if (!this.checkNumber(this.addPictureId)) {
+          this.$message.warning('请输入数字!')
+          return
+      }
+      this.add_picture_ids.push(Number(this.addPictureId))
+      this.addPictureIds.push({add_picture_id: this.addPictureId})
+      this.addPaintId = ''
+    },
+    checkNumber(theObj) {
+        return (theObj*1) == (theObj*1)
+    }
+  },
+  watch: {
+    addPictureId: function() {
+          if(this.addPictureId){
+              this.confirmAddDis = false
+          }else{
+              this.confirmAddDis = true
+          }
+    },
+    addPictureIds: function() {
+        if(this.addPictureIds.length > 0){
+            this.addButtonDis = false
+        }else{
+            this.addButtonDis = true
+        }
     }
   },
   created() {

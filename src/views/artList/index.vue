@@ -26,7 +26,7 @@ export default {
         this.$message('没有数据！');
       }
       }catch(e){
-        this.$message.error(e.error);
+        this.$message.error(e.err);
       }
     },
     setSuccess() {
