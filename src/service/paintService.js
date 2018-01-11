@@ -7,8 +7,11 @@ export const getPaintList = (param) => request.get('/api/painting/'+param+'/pain
 // 拉取画单详情
 export const getPaintDetail = (param) => request.get('/api/painting/'+param+'/info')
 
-// 删除多个画单
-export const deletePaint = (param) => request.post('/api/painting/delete_list', param)
+// 普通画单删除
+export const deleteNormalPaint= (param) => request.post('/api/painting/delete_list', param)
+
+// 删除最新,最热列表中的画单
+export const deletePaint = (param) => request.post('/op/discovery/delete_paint_list', param)
 
 // 修改画单
 export const updatePaint = (param) => request.post('/api/painting/set_paint_info', param)
@@ -49,5 +52,5 @@ export const deleteCqList= (param) => request.post('/api/discovery/delete_cq_lis
 // 设置今日推荐最新，最热的显示。今日推荐banner，艺术先锋
 export const setPaintList= (param) => request.post('/op/discovery/set_paint_list', param)
 
-// 普通画单删除
-export const deleteNormalPaint= (param) => request.post('/api/painting/delete_list', param)
+// 画单添加到最新,最热列表中
+export const addPaintList= (param) => request.post('/op/discovery/add_paint_list', param)
