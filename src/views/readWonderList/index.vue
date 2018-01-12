@@ -190,9 +190,10 @@ export default {
   },
   async created(){
       this.$store.commit(types.SET_BREADCRUMBS, [
-        {
-            title: '读精彩列表'
-        }]
+            {
+                title: '读精彩列表'
+            }
+        ]
       )
       this.getReadWonderList()
   },

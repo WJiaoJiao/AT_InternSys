@@ -21,7 +21,7 @@
                 <el-table-column type="selection" width="55"></el-table-column>
                 <el-table-column label="封面" width="220">
                     <template slot-scope="scope">
-                        <img :src="scope.row.title_url" style="width: 200px;height: auto"/>
+                        <img :src="scope.row.title_url ? scope.row.title_url : '../src/assets/bitmap.jpeg'" style="width: 200px;height: auto"/>
                     </template>
                 </el-table-column>
                 <el-table-column prop="paint_id" label="画单ID" width="100"></el-table-column>
@@ -76,6 +76,7 @@
 import _ from 'lodash';
 import * as types from '@/store/types'
 import {getPaintList,deletePaint,getPaintListById,getPaintListByKw,setPaintList,deleteNormalPaint,addPaintList} from '@/service/paintService.js'
+
 export default {
   name: 'PaintList',
   props: ['paintList','isSearch','type'],

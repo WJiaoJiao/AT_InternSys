@@ -134,7 +134,7 @@ export default {
 
     }
   },
-  async created(){
+  created(){
       this.$store.commit(types.SET_BREADCRUMBS, [
         {
             title: '大咖说列表'

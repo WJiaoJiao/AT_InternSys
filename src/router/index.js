@@ -4,7 +4,6 @@ import HelloWorld from '@/components/HelloWorld'
 import uploadExcel from '@/views/uploadExcel/index.vue'
 import uploadImg from '@/views/uploadImg/index.vue'
 import paintingList from '@/views/painting/paintingList.vue'
-import author from '@/views/author/index.vue'
 import lastedList from '@/views/lastedList/index.vue'
 import paintDetail from '@/views/paintDetail/index.vue'
 import hottestList from '@/views/hottestList/index.vue'
@@ -13,6 +12,8 @@ import artList from '@/views/artList/index.vue'
 import normalList from '@/views/normalList/index.vue'
 import grandCafeList from '@/views/grandCafeList/index.vue'
 import readWonderList from '@/views/readWonderList/index.vue'
+import authorList from '@/views/authorList/index.vue'
+
 
 Vue.use(Router)
 
@@ -79,6 +80,11 @@ export default new Router({
       path: '/readWonderList',
       name: 'readWonderList',
       component: readWonderList
+    },
+    {
+      path: '/authorList',
+      name: 'authorList',
+      component: authorList
     }
   ]
 })

@@ -1,41 +1,23 @@
 <template>
     <div class="content">
-      <el-breadcrumb separator-class="el-icon-arrow-right" class="app-breadcrumb">
-        <el-breadcrumb-item>上传</el-breadcrumb-item>
-        <el-breadcrumb-item>上传Excel</el-breadcrumb-item>
-      </el-breadcrumb>
       <el-card>
-        <el-upload class="upload-demo" drag action="/api/img/upload/capsule" multiple :on-success="uploadSuccess" :on-remove="removeAction" :before-upload="beforeAvatarUpload">
+        <el-upload class="upload-demo" drag action="/api/file/execl_upload" multiple :on-success="uploadSuccess" :on-remove="removeAction" :before-upload="beforeAvatarUpload">
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
             <div class="el-upload__tip" slot="tip">只能上传xlsx文件</div>
         </el-upload>
+        <el-button type="primary" class="fr" style="margin-bottom: 20px">查询最新一次上传记录</el-button>
       </el-card>
     </div>
 </template>
 
 <script>
+import * as types from '@/store/types'
 export default {
   name: 'UploadExcel',
   data () {
     return {
-      tableData: [{
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            date: '2016-05-04',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1517 弄'
-          }, {
-            date: '2016-05-01',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1519 弄'
-          }, {
-            date: '2016-05-03',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1516 弄'
-          }]
+    
     }
   },
   methods: {
@@ -53,6 +35,17 @@ export default {
       }
       return isXLSX;
     }
+  },
+  created() {
+    this.$store.commit(types.SET_BREADCRUMBS, [
+          {
+              title: '上传'
+          },
+          {
+              title: '上传Excel'
+          }
+      ]
+    )
   }
 }
 </script>

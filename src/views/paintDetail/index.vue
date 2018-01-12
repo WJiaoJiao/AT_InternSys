@@ -71,7 +71,7 @@
         <preview-img title="预览封面缩略图" :visible="thumbnailPicVisible" :src="paintDetail.title_url"  @close="()=>{this.thumbnailPicVisible = false}"></preview-img>
         <preview-img title="预览原图" :visible="originVisible" :src="detail_url"  @close="()=>{this.originVisible = false}"></preview-img>
         <preview-img title="预览缩略图" :visible="thumbnailVisible" :src="picture_url"  @close="()=>{this.thumbnailVisible = false}"></preview-img>
-        <upload-thumbnail title="修改封面缩略图" :visible="editThumbnailVisible" :src="paintDetail.title_detail_url" @close="editThumbnailVisible=false" :size="{width: 346,height:210}"></upload-thumbnail>
+        <upload-thumbnail title="修改封面缩略图" :visible="editThumbnailVisible" :src="paintDetail.title_detail_url" @close="editThumbnailVisible=false" :size="{width: 346,height:210}" :thumbnailUrl="paintDetail.title_url" @setSuccess="setSuccess"></upload-thumbnail>
         <upload-thumbnail title="修改画作缩略图" :visible="editPictureVisible" :src="detail_url" @close="editPictureVisible=false" :size="{width: 218,height:218}"></upload-thumbnail>
 
         <el-dialog
@@ -103,9 +103,9 @@
             </el-form>
         </el-dialog>
 
-        <el-dialog title="添加画单" :visible.sync="addPictureVisible" width="440px" @close="closeDialogAction">
+        <el-dialog title="添加画作" :visible.sync="addPictureVisible" width="440px" @close="closeDialogAction">
               <el-form :inline="true" class="demo-form-inline" ref="addPictureForm">
-                  <el-form-item label="画单ID" label-width="120px">
+                  <el-form-item label="画作编号" label-width="120px">
                       <el-input v-model="addPictureId"></el-input>
                   </el-form-item>
                   <el-form-item>
@@ -113,7 +113,7 @@
                   </el-form-item>
               </el-form>
               <el-table :data="addPictureIds">
-                  <el-table-column property="add_picture_id" label="画单ID" width="350"></el-table-column>
+                  <el-table-column property="add_picture_id" label="画作编号" width="350"></el-table-column>
                   <el-table-column  property="add_picture_id" label="删除">
                       <template slot-scope="scope">
                           <i class="el-icon-close" style="font-size: 20px" @click="deleteAddPicture(scope.row.add_picture_id)"></i>
@@ -130,7 +130,7 @@
 
 <script>
 import * as types from '@/store/types'
-import {getPaintDetail,updatePaint,getPicInfo,uploadThumbnail,addDeletePaint} from '@/service/paintService.js'
+import {getPaintDetail,updatePaint,getPicInfo,addDeletePaint} from '@/service/paintService.js'
 import Cropper from 'cropperjs'
 import 'cropperjs/dist/cropper.css'
 import PreviewImg from '@/components/PreviewImg.vue'
@@ -317,6 +317,9 @@ export default {
     },
     checkNumber(theObj) {
         return (theObj*1) == (theObj*1)
+    },
+    setSuccess() {
+        this.getDetail()
     }
   },
   watch: {

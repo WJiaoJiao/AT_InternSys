@@ -17,10 +17,10 @@
 <script>
 import Cropper from 'cropperjs'
 import 'cropperjs/dist/cropper.css'
-import {uploadThumbnail} from '@/service/paintService.js'
+import {uploadPicture} from '@/service/paintService.js'
 export default {
   name: 'UploadThumbnail',
-  props: ['title','visible','src','size'],
+  props: ['title','visible','src','size','thumbnailUrl'],
   data () {
     return {
       cropper: null
@@ -28,14 +28,20 @@ export default {
   },
   methods: {
     uploadThumbnail() {
-      let fileName = decodeURI(this.src).split('/').pop().split('.').shift()
+      var that = this
+      let fileName = decodeURI(this.thumbnailUrl).split('/').pop().split('.').shift()
       console.log(fileName)
-      this.cropper.getCroppedCanvas().toBlob(function (blob) {
-        console.log(blob);
-        var formData = new FormData();
-
-        formData.append('file', blob, fileName);
-        uploadThumbnail(formData)
+      this.cropper.getCroppedCanvas().toBlob(async function (blob) {
+        var formData = new FormData()
+        formData.append('file', blob, fileName)
+        try{
+          let respData = await uploadPicture(formData)
+          that.$message.success('修改成功')
+          that.$emit('close');
+          that.$emit('setSuccess')
+        }catch(e){
+          that.$message.error(e.err)
+        }
       });
     },
     close() {

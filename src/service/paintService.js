@@ -19,9 +19,6 @@ export const updatePaint = (param) => request.post('/api/painting/set_paint_info
 //拉取画作详情
 export const getPicInfo = (param) => request.get('/api/painting/picture/'+param+'/info')
 
-// 上传缩略图
-export const uploadThumbnail = (param) => request.post('/test/api/img/upload/capsule',param)
-
 // 通过id查询画单
 export const getPaintListById = (param) => request.get('/api/painting/'+param+'/info')
 
@@ -57,3 +54,12 @@ export const addPaintList= (param) => request.post('/op/discovery/add_paint_list
 
 // 画单添加,删除画作
 export const addDeletePaint= (param) => request.post('/op/painting/add_delete_paint', param)
+
+// 上传图片
+export const uploadPicture = (param) => request.post('/api/imgs/upload/common',param)
+
+// 上传excel
+export const uploadExcel = (param) => request.post('/api/file/execl_upload',param)
+
+// 上传excel
+export const getAuthorPaintList = (param) => request.get('/op/painting/'+ param +'/author_paint_list')

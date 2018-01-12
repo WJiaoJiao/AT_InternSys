@@ -60,18 +60,12 @@ export default {
           ]
         },
         {
-          title: '作者',
-          route: 'author',
-          children: [
-            {
-              title: '作者列表',
-              route: '/authorList'
-            }
-          ]
-        },
-        {
           title: '普通画单',
           route: '/normalList'
+        },
+        {
+          title: '作者画单',
+          route: '/authorList'
         },
         {
           title: '画单分类',

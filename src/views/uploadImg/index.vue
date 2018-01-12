@@ -1,11 +1,7 @@
 <template>
     <div class="content">
-      <el-breadcrumb separator-class="el-icon-arrow-right" class="app-breadcrumb">
-        <el-breadcrumb-item>上传</el-breadcrumb-item>
-        <el-breadcrumb-item>上传图片</el-breadcrumb-item>
-      </el-breadcrumb>
       <el-card>
-        <el-upload class="upload-demo" drag action="/api/img/upload/capsule" multiple :on-success="uploadSuccess" :on-remove="removeAction" :before-upload="beforeAvatarUpload">
+        <el-upload class="upload-demo" drag action="/api/imgs/upload/common" multiple :on-success="uploadSuccess" :on-remove="removeAction" :before-upload="beforeAvatarUpload">
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
             <div class="el-upload__tip" slot="tip">只能上传jpg/png文件</div>
@@ -15,6 +11,7 @@
 </template>
 
 <script>
+import * as types from '@/store/types'
 export default {
   name: 'UploadExcel',
   data () {
@@ -36,7 +33,15 @@ export default {
     }
   },
   created(){
-   
+    this.$store.commit(types.SET_BREADCRUMBS, [
+          {
+              title: '上传'
+          },
+          {
+              title: '上传图片'
+          }
+      ]
+    )
   }
 }
 </script>
