@@ -25,7 +25,7 @@
             </el-form-item>
             <el-form-item label="封面原图">
                 <el-button type="primary" plain @click="()=>{this.originPicVisible = true}">预览</el-button>
-                <el-button type="primary" plain>修改</el-button>
+                <upload-detail :src="paintDetail.title_detail_url"></upload-detail>
             </el-form-item>
             <el-form-item label="封面缩略图">
                 <el-button type="primary" plain @click="()=>{this.thumbnailPicVisible = true}">预览</el-button>
@@ -41,15 +41,16 @@
                             <span>{{scope.row.picture_type ? (scope.row.picture_type === 1 ? '横图' : '竖图') : ''}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column label="原图"  width="120">
+                    <el-table-column label="原图"  width="220">
                         <template slot-scope="scope">
                             <el-button type="primary" plain @click="showPic(scope.row.detail_url)">预览</el-button>
+                            <upload-detail :src="scope.row.detail_url"></upload-detail>
                         </template>
                     </el-table-column>
                     <el-table-column label="缩略图" width="180">
                         <template slot-scope="scope">
                             <el-button type="primary" plain @click="showThumbnail(scope.row.picture_url)">预览</el-button>
-                            <el-button type="primary" plain @click="editPicture(scope.row.detail_url)">修改</el-button>
+                            <el-button type="primary" plain @click="editPicture(scope.row.detail_url,scope.row.picture_url)">修改</el-button>
                         </template>
                     </el-table-column>
                     <el-table-column label="操作">
@@ -72,7 +73,7 @@
         <preview-img title="预览原图" :visible="originVisible" :src="detail_url"  @close="()=>{this.originVisible = false}"></preview-img>
         <preview-img title="预览缩略图" :visible="thumbnailVisible" :src="picture_url"  @close="()=>{this.thumbnailVisible = false}"></preview-img>
         <upload-thumbnail title="修改封面缩略图" :visible="editThumbnailVisible" :src="paintDetail.title_detail_url" @close="editThumbnailVisible=false" :size="{width: 346,height:210}" :thumbnailUrl="paintDetail.title_url" @setSuccess="setSuccess"></upload-thumbnail>
-        <upload-thumbnail title="修改画作缩略图" :visible="editPictureVisible" :src="detail_url" @close="editPictureVisible=false" :size="{width: 218,height:218}"></upload-thumbnail>
+        <upload-thumbnail title="修改画作缩略图" :visible="editPictureVisible" :src="detail_url" @close="editPictureVisible=false" :size="{width: 218,height:218}" :thumbnailUrl="picture_url" @setSuccess="setSuccess"></upload-thumbnail>
 
         <el-dialog
           title="画作详情"
@@ -135,11 +136,14 @@ import Cropper from 'cropperjs'
 import 'cropperjs/dist/cropper.css'
 import PreviewImg from '@/components/PreviewImg.vue'
 import UploadThumbnail from '@/components/UploadThumbnail.vue'
+import UploadDetail from '@/components/UploadDetail.vue'
+
 export default {
   name: 'paintDetail',
   components:{
     'preview-img': PreviewImg,
-    'upload-thumbnail': UploadThumbnail
+    'upload-thumbnail': UploadThumbnail,
+    UploadDetail
   },
   data () {
     return {
@@ -163,10 +167,20 @@ export default {
       confirmAddDis: true,
       addPictureIds: [],
       addButtonDis: true,
-      add_picture_ids: []
+      add_picture_ids: [],
+      detail_url_name: ''
     }
   },
   methods: {
+      beforeUpload(file){
+          console.log(file)
+          if(file.name != this.detail_url_name){
+              this.$message.error('请保证文件名为'+'"'+this.detail_url_name+'"')
+              return false
+          }else{
+              return true
+          }
+      },
     onSubmit() {
         console.log('submit!');
     },
@@ -186,6 +200,7 @@ export default {
             let respData = await getPaintDetail(this.$route.params.paintId)
             this.paintDetail = respData.paint_detail
             this.picture_info = respData.paint_detail.picture_info
+            this.detail_url_name = decodeURI(respData.paint_detail.title_detail_url).split('/').pop()
         }catch(e){
             this.$message.error(e.err);
         }
@@ -229,9 +244,11 @@ export default {
             this.$message.error(e.err);
         }
     },
-    editPicture(detail_url) {
-      this.editPictureVisible = true
-      this.detail_url = detail_url
+    editPicture(detail_url,picture_url) {
+        console.log(detail_url,picture_url)
+        this.editPictureVisible = true
+        this.detail_url = detail_url
+        this.picture_url = picture_url
     },
     handleSelectionChange(val) {
         this.multipleSelection = val;

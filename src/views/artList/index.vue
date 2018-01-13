@@ -36,7 +36,7 @@ export default {
   async created(){
     this.$store.commit(types.SET_BREADCRUMBS, [
       {
-        title: '画单分类'
+        title: '首页推荐'
       },
       {
         to: {

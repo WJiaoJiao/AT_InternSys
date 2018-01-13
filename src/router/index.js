@@ -13,7 +13,9 @@ import normalList from '@/views/normalList/index.vue'
 import grandCafeList from '@/views/grandCafeList/index.vue'
 import readWonderList from '@/views/readWonderList/index.vue'
 import authorList from '@/views/authorList/index.vue'
-
+import artClassify from '@/views/artClassify/index.vue'
+import sceneClassify from '@/views/sceneClassify/index.vue'
+import emotionClassify from '@/views/emotionClassify/index.vue'
 
 Vue.use(Router)
 
@@ -85,6 +87,21 @@ export default new Router({
       path: '/authorList',
       name: 'authorList',
       component: authorList
+    },
+    {
+      path: '/artClassify',
+      name: 'artClassify',
+      component: artClassify
+    },
+    {
+      path: '/sceneClassify',
+      name: 'sceneClassify',
+      component: sceneClassify
+    },
+    {
+      path: '/emotionClassify',
+      name: 'emotionClassify',
+      component: emotionClassify
     }
   ]
 })

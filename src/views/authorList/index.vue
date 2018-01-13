@@ -1,43 +1,45 @@
 <template>
     <div>      
-      <el-table
-        :data="tableData"
-        style="width: 100%">
-        <el-table-column
-          prop="date"
-          label="日期"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="name"
-          label="姓名"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="address"
-          label="地址">
-        </el-table-column>
-      </el-table>
+      <paint-list :paintList="paintList" :isSearch="false" @setData="setData" type="author" :lastId="last_id" @loadmore="getAuthorPaintList"></paint-list>
     </div>
 </template>
 
 <script>
 import * as types from '@/store/types'
+import PaintList from '@/components/PaintList.vue'
 import {getAuthorPaintList} from '@/service/paintService.js'
 export default {
-  name: 'UploadExcel',
+  components:{
+    'paint-list': PaintList
+  },
   data () {
     return {
+      last_id: '',
+      paintList: [],
+      hasLastId: false
     }
   },
   methods: {
     async getAuthorPaintList() {
+      let data = {}
+      if(this.last_id){
+        data.last_id = this.last_id
+      }
       try{
-        let respData = await getAuthorPaintList(1)
+        let respData = await getAuthorPaintList(data)
+        this.paintList = this.paintList.concat(respData.paint_list)
+        if(respData.last_id){
+          this.last_id = respData.last_id
+        }else{
+          this.last_id = ''
+        }
         console.log(respData)
       }catch(e){
         this.$message.error(e.err)
       }
+    },
+    setData () {
+
     }
   },
   created(){

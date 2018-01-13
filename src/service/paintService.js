@@ -61,5 +61,17 @@ export const uploadPicture = (param) => request.post('/api/imgs/upload/common',p
 // 上传excel
 export const uploadExcel = (param) => request.post('/api/file/execl_upload',param)
 
-// 上传excel
-export const getAuthorPaintList = (param) => request.get('/op/painting/'+ param +'/author_paint_list')
+// 获取作者画单
+export const getAuthorPaintList = (param) => request.post('/op/painting/author_paint_list',param)
+
+// 获取所有画单
+export const getAllPaintList = (param) => request.post('/op/painting/paint_list',param)
+
+// 获取分类-艺术首页
+export const getArtHome = (param) => request.get('/api/classify/get_art_home')
+
+// 获取分类-艺术首页
+export const getMoodHome = (param) => request.get('/api/classify/get_mood_home')
+
+// 获取分类-场景首页
+export const getSceneHome = (param) => request.get('/api/classify/get_scene_home')

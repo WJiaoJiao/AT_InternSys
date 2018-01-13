@@ -68,7 +68,7 @@ export default {
           route: '/authorList'
         },
         {
-          title: '画单分类',
+          title: '首页推荐',
           route: 'paintClassify',
           children: [
             {
@@ -96,23 +96,25 @@ export default {
         {
           title: '读精彩',
           route: '/readWonderList'
+        },
+        {
+          title: '分类',
+          route: 'classification',
+          children: [
+            {
+              title: '艺术',
+              route: '/artClassify'
+            },
+            {
+              title: '心情',
+              route: '/emotionClassify'
+            },
+            {
+              title: '场景',
+              route: '/sceneClassify'
+            }
+          ]
         }
-        // {
-        //   title: '最新',
-        //   route: '/lastedList'
-        // },
-        // {
-        //   title: '最热',
-        //   route: '/hottestList'
-        // },
-        // {
-        //   title: '今天推荐',
-        //   route: '/todayList'
-        // },
-        // {
-        //   title: '艺术先锋',
-        //   route: '/artList'
-        // }
       ]
     }
   },
@@ -147,6 +149,21 @@ export default {
     }
     if(path.indexOf('readWonderList') > -1){
       this.defaultActive = '/readWonderList'
+    }
+    if(path.indexOf('uploadExcel') > -1){
+      this.defaultActive = '/uploadExcel'
+    }
+    if(path.indexOf('uploadImg') > -1){
+      this.defaultActive = '/uploadImg'
+    }
+    if(path.indexOf('artClassify') > -1){
+      this.defaultActive = '/artClassify'
+    }
+    if(path.indexOf('sceneClassify') > -1){
+      this.defaultActive = '/sceneClassify'
+    }
+    if(path.indexOf('emotionClassify') > -1){
+      this.defaultActive = '/emotionClassify'
     }
   }
 }

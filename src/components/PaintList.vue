@@ -15,10 +15,11 @@
                             <i class="el-icon-question" style="color: #909399;font-size: 18px"></i>
                         </el-tooltip>
                     </el-form-item>
+                    <el-button type="primary" @click="onSearchAll" class="fr">查询所有画单</el-button>
                 </el-form>
             </div>
-            <el-table stripe border ref="multipleTable" :data="paintList" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange" v-if="hasData">
-                <el-table-column type="selection" width="55"></el-table-column>
+            <el-table stripe border ref="multipleTable" :data="paintList" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange" v-if="hasData" v-loading="loading">
+                <el-table-column type="selection" width="55" v-if="type != 'author'"></el-table-column>
                 <el-table-column label="封面" width="220">
                     <template slot-scope="scope">
                         <img :src="scope.row.title_url ? scope.row.title_url : '../src/assets/bitmap.jpeg'" style="width: 200px;height: auto"/>
@@ -37,15 +38,18 @@
                 </el-table-column>
                 <el-table-column prop="flag" label="操作" show-overflow-tooltip width="100">
                     <template  slot-scope="scope">
-                    <el-button type="primary" plain @click="showDetail(scope.row.paint_id)">查看详情</el-button>
+                        <el-button type="primary" plain @click="showDetail(scope.row.paint_id)">查看详情</el-button>
                     </template>
                 </el-table-column>
             </el-table>
+            <div style="width: 100%;text-align: center">
+                <el-button type="primary" plain @click="onSearchAll('loadmore')" :disabled="last_id ? false : true" style="width: 100%;margin-top: 30px" v-if="hasData && type=='normal' || type=='author'">加载更多</el-button>
+            </div>
             <div style="margin: 20px 0;text-align: right">
-                <el-button @click="toggleSelection()">取消选择</el-button>
+                <el-button @click="toggleSelection()" v-if="type != 'author'">取消选择</el-button>
                 <el-button type="primary" @click="homeShowAction" v-if="type == 2 || type == 3">设置在首页中显示</el-button>
-                <el-button type="primary" @click="addPaint" v-if="type != 'normal'">添加画单</el-button>
-                <el-button type="danger" @click="deletePaints">删除</el-button>
+                <el-button type="primary" @click="addPaint" v-if="type==1 || type==2 || type==3 || type==4">添加画单</el-button>
+                <el-button type="danger" @click="deletePaints" v-if="type != 'author'">删除</el-button>
             </div>
             <el-dialog title="添加画单" :visible.sync="addPaintVisible" width="440px" @close="closeDialogAction">
                 <el-form :inline="true" class="demo-form-inline" ref="addPaintForm">
@@ -75,11 +79,11 @@
 <script>
 import _ from 'lodash';
 import * as types from '@/store/types'
-import {getPaintList,deletePaint,getPaintListById,getPaintListByKw,setPaintList,deleteNormalPaint,addPaintList} from '@/service/paintService.js'
+import {getPaintList,deletePaint,getPaintListById,getPaintListByKw,setPaintList,deleteNormalPaint,addPaintList,getAllPaintList} from '@/service/paintService.js'
 
 export default {
   name: 'PaintList',
-  props: ['paintList','isSearch','type'],
+  props: ['paintList','isSearch','type','lastId'],
   data () {
     return {
         multipleSelection: [],
@@ -95,7 +99,9 @@ export default {
         addPaintIds: [],
         addPaintId: '',
         confirmAddDis: true,
-        addButtonDis: true
+        addButtonDis: true,
+        last_id: '',
+        loading: false
     }
   },
   methods: {
@@ -162,8 +168,8 @@ export default {
             }
         }
     },
-    async onSearch(){
-        this.$emit('setData',[]);
+    async onSearch() {
+        this.$emit('setData',{paintList: [],type: 'search'});
         let id = this.formInline.id
         let keyWords = this.formInline.keyWords
         if(!id && !keyWords){
@@ -176,7 +182,7 @@ export default {
                 if(paintListData.paint_detail){
                     this.hasData = true
                     let paintList = [paintListData.paint_detail]
-                    this.$emit('setData',paintList);
+                    this.$emit('setData',{paintList: paintList,type: 'search'});
                 }else{
                     this.$message('没有数据！');
                 }
@@ -191,14 +197,43 @@ export default {
                 if(paintListData.paint_info && paintListData.paint_info.length > 0){
                     this.hasData = true
                     let paintList = paintListData.paint_info
-                    this.$emit('setData',paintList);
+                    this.$emit('setData',{paintList: paintList,type: 'search'});
                 }else{
                     this.$message('没有数据！');
                 }
             }catch(e){
-                this.$message.error(e.error);
+                this.$message.error(e.err);
             }
         }
+    },
+    async onSearchAll(type) {
+        if(this.type == 'author'){
+            this.$emit('loadmore')
+            return
+        }
+        if(type != 'loadmore'){
+            this.last_id = ''
+            this.$emit('setData',{paintList: [],type: 'search'});
+        }
+        try{
+            let data = {}
+            if(this.last_id){
+                data.last_id = this.last_id
+            }
+            let respData = await getAllPaintList(data)
+            if(respData.paint_list && respData.paint_list.length > 0){
+                this.hasData = true
+                this.$emit('setData',{paintList: respData.paint_list,type: 'searchAll'});
+                if(respData.last_id){
+                    this.last_id = respData.last_id
+                }else{
+                    this.last_id = ''
+                }
+            }
+        }catch(e){
+            this.$message.error(e.err);
+        }
+        this.loading = false
     },
     async homeShowAction() {
         if(this.type == 2 || this.type == 3 ){
@@ -303,6 +338,12 @@ export default {
               this.addButtonDis = false
           }else{
               this.addButtonDis = true
+          }
+      },
+      lastId: function(){
+          console.log(this.lastId)
+          if(this.type == 'author' && this.lastId){
+             this.last_id = this.lastId
           }
       }
   },

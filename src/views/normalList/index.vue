@@ -17,8 +17,13 @@ export default {
     }
   },
   methods: {
-      setData(paintList) {
-          this.paintList = paintList
+      setData(data) {
+          console.log(data)
+          if(data.type == 'search'){
+            this.paintList = data.paintList
+          }else{
+            this.paintList = this.paintList.concat(data.paintList)
+          }
       }
   },
   created(){

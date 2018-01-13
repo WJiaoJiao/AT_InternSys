@@ -1,9 +1,5 @@
 <template>
     <div class="content">
-      <el-breadcrumb separator-class="el-icon-arrow-right" class="app-breadcrumb">
-        <el-breadcrumb-item>最新</el-breadcrumb-item>
-        <el-breadcrumb-item>最新列表</el-breadcrumb-item>
-      </el-breadcrumb>
       <el-card>
     
       </el-card>
@@ -12,7 +8,6 @@
 
 <script>
 export default {
-  name: 'HelloWorld',
   data () {
     return {
       
