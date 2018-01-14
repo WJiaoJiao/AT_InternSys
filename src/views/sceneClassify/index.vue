@@ -1,8 +1,7 @@
 <template>
     <div class="content">
       <el-card>
-        <div slot="header">
-          <el-collapse v-model="activeNames" accordion>
+        <el-collapse v-model="activeNames" accordion>
             <el-collapse-item :title="scene.type_name" :name="scene.type_id" v-for="scene in sceneList" :key="scene.type_id">
               <el-table stripe border :data="scene.paints" tooltip-effect="dark" style="width: 100%">
                 <el-table-column label="封面" width="220">
@@ -20,7 +19,6 @@
             </el-table>
             </el-collapse-item>
           </el-collapse>
-        </div>
       </el-card>
     </div>
 </template>

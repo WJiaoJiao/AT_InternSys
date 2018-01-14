@@ -6,7 +6,7 @@
             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
             <div class="el-upload__tip" slot="tip">只能上传xlsx文件</div>
         </el-upload>
-        <el-button type="primary" class="fr" style="margin-bottom: 20px">查询最新一次上传记录</el-button>
+        <!--<el-button type="primary" class="fr" style="margin-bottom: 20px">查询最新一次上传记录</el-button>-->
       </el-card>
     </div>
 </template>

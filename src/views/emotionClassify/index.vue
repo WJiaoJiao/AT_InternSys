@@ -1,22 +1,15 @@
 <template>
     <div class="content">
       <el-card>
-        <div slot="header">
-          <el-table stripe border :data="paints" tooltip-effect="dark" style="width: 100%">
-                <el-table-column label="封面" width="220">
-                    <template slot-scope="scope">
-                        <img :src="scope.row.img_url" style="width: 200px;height: auto"/>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="paint_id" label="画单ID" width="100"></el-table-column>
-                <el-table-column prop="paint_name" label="标题"></el-table-column>
-                <el-table-column prop="paint_id" label="操作" show-overflow-tooltip width="100">
-                    <template  slot-scope="scope">
-                        <el-button type="primary" plain @click="showDetail(scope.row.paint_id)">查看详情</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </div>
+        <el-table stripe border :data="paints" tooltip-effect="dark" style="width: 100%">
+            <el-table-column prop="paint_id" label="画单ID" width="100"></el-table-column>
+            <el-table-column prop="paint_name" label="标题"></el-table-column>
+            <el-table-column prop="paint_id" label="操作" show-overflow-tooltip width="100">
+                <template  slot-scope="scope">
+                    <el-button type="primary" plain @click="showDetail(scope.row.paint_id)">查看详情</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
       </el-card>
     </div>
 </template>

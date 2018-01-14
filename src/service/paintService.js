@@ -44,7 +44,7 @@ export const setPoineerCq = (param) => request.post('/op/discovery/set_poineer_c
 export const setCqList = (param) => request.post('/op/discovery/set_cq_list', param)
 
 // 删除读精彩
-export const deleteCqList= (param) => request.post('/api/discovery/delete_cq_list', param)
+export const deleteCqList= (param) => request.post('/op/discovery/delete_cq_list', param)
 
 // 设置今日推荐最新，最热的显示。今日推荐banner，艺术先锋
 export const setPaintList= (param) => request.post('/op/discovery/set_paint_list', param)

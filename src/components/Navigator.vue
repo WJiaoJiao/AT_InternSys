@@ -13,7 +13,7 @@
           :index="subMenu.route">{{subMenu.title}}</el-menu-item>
         </el-submenu>
     </template>
-    <el-button type="primary" style="margin-top: 14px;float: right" @click="dialogVisible = true">登录</el-button>
+    <!--<el-button type="primary" style="margin-top: 14px;float: right" @click="dialogVisible = true">登录</el-button>-->
     <el-dialog
       title="登录"
       :visible.sync="dialogVisible"
@@ -46,16 +46,6 @@ export default {
             {
               title: '上传图片',
               route: '/uploadImg'
-            }
-          ]
-        },
-        {
-          title: '画作',
-          route: 'painting',
-          children: [
-            {
-              title: '画作列表',
-              route: '/paintingList'
             }
           ]
         },

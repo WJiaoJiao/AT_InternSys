@@ -8,28 +8,28 @@
             <el-form-item label="浏览数量">
                 <el-input v-model="paintDetail.read_num" disabled></el-input>
             </el-form-item>
-            <el-form-item label="收藏数量">
+            <el-form-item label="收藏数量" v-if="type != 'emotionClassify' && type != 'artClassify' && type!='sceneClassify'">
                 <el-input v-model="paintDetail.collect_num" disabled></el-input>
             </el-form-item>
             <el-form-item label="作品数量">
                 <el-input v-model="paintDetail.picture_num" disabled></el-input>
             </el-form-item>
             <el-form-item label="标题">
-                <el-input v-model="paintDetail.paint_title"></el-input>
+                <el-input v-model="paintDetail.paint_title" :disabled="type == 'emotionClassify' || type == 'artClassify' || type == 'sceneClassify' ? true : false"></el-input>
             </el-form-item>
-            <el-form-item label="副标题">
+            <el-form-item label="副标题" v-if="type != 'emotionClassify' && type != 'artClassify' && type!='sceneClassify'">
                 <el-input v-model="paintDetail.sub_title"></el-input>
             </el-form-item>
-            <el-form-item label="详细描述">
+            <el-form-item label="详细描述" v-if="type != 'emotionClassify' && type != 'artClassify' && type!='sceneClassify'">
                 <el-input v-model="paintDetail.paint_detail"></el-input>
             </el-form-item>
-            <el-form-item label="封面原图">
+            <el-form-item label="封面原图" v-if="type != 'emotionClassify' && type != 'artClassify' && type!='sceneClassify'">
                 <el-button type="primary" plain @click="()=>{this.originPicVisible = true}">预览</el-button>
-                <upload-detail :src="paintDetail.title_detail_url"></upload-detail>
+                <upload-detail :src="paintDetail.title_detail_url" @setSuccess="setSuccess"></upload-detail>
             </el-form-item>
-            <el-form-item label="封面缩略图">
+            <el-form-item label="封面缩略图" v-if="type != 'emotionClassify'">
                 <el-button type="primary" plain @click="()=>{this.thumbnailPicVisible = true}">预览</el-button>
-                <el-button type="primary" plain @click="editThumbnailPic()">修改</el-button>
+                <el-button type="primary" plain @click="editThumbnailPic()" v-if="type != 'artClassify' && type!='sceneClassify'">修改</el-button>
             </el-form-item>
             <el-form-item label="画作信息">
                 <el-table :data="picture_info" border style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange">
@@ -44,7 +44,7 @@
                     <el-table-column label="原图"  width="220">
                         <template slot-scope="scope">
                             <el-button type="primary" plain @click="showPic(scope.row.detail_url)">预览</el-button>
-                            <upload-detail :src="scope.row.detail_url"></upload-detail>
+                            <upload-detail :src="scope.row.detail_url" @setSuccess="setSuccess"></upload-detail>
                         </template>
                     </el-table-column>
                     <el-table-column label="缩略图" width="180">
@@ -63,7 +63,7 @@
                     <el-button type="primary" @click="addPic">添加画作</el-button>
                     <el-button type="danger" @click="deletePic">删除画作</el-button>
                 </div>
-                <div style="margin-top: 20px;text-align: right">
+                <div style="margin-top: 20px;text-align: right" v-if="type != 'emotionClassify' && type != 'artClassify' && type != 'artClassify' && type!='sceneClassify'">
                     <el-button type="primary" @click="save">保存</el-button>
                 </div>
             </el-form-item>
@@ -168,19 +168,11 @@ export default {
       addPictureIds: [],
       addButtonDis: true,
       add_picture_ids: [],
-      detail_url_name: ''
+      detail_url_name: '',
+      type: ''
     }
   },
   methods: {
-      beforeUpload(file){
-          console.log(file)
-          if(file.name != this.detail_url_name){
-              this.$message.error('请保证文件名为'+'"'+this.detail_url_name+'"')
-              return false
-          }else{
-              return true
-          }
-      },
     onSubmit() {
         console.log('submit!');
     },
@@ -357,6 +349,8 @@ export default {
   },
   created() {
       let type = this.$route.params.type
+      this.type = type
+      console.log(type)
       let title = ''
       if(type == 'lastedList'){
         title = '最新列表'
@@ -370,20 +364,47 @@ export default {
       if(type == 'artList'){
         title =  '艺术先锋列表'
       }
-      this.$store.commit(types.SET_BREADCRUMBS, [
-        {
-            title: '画单分类'
-        },
-        {
-          to: {
-            path: '/' + type
-          },
-          title
-        },
-        {
-          title: '详情'
-        }
-      ])
+      if(type == 'artClassify'){
+        title =  '艺术'
+      }
+      if(type == 'emotionClassify'){
+          title =  '心情'
+      }
+      if(type == 'sceneClassify'){
+          title =  '场景'
+      }
+      if(type == 'normalList'){
+          title =  '普通画单列表'
+      }
+      if(type == 'authorList'){
+          title =  '作者画单列表'
+      }
+      if(type == 'normalList' || type == 'authorList'){
+          this.$store.commit(types.SET_BREADCRUMBS, [
+            {
+                title
+            },
+            {
+                title: '详情'
+            }
+        ])
+      }else{
+          this.$store.commit(types.SET_BREADCRUMBS, [
+            {
+                title: type == 'artClassify' ||  type == 'emotionClassify' || type == 'sceneClassify' ? '分类' : '首页推荐'
+            },
+            {
+            to: {
+                path: '/' + type
+            },
+            title
+            },
+            {
+            title: '详情'
+            }
+        ])
+      }
+      
       this.getDetail()
   }
 }

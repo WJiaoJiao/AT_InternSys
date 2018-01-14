@@ -2,8 +2,10 @@
     <el-upload
         class="upload-demo"
         :before-upload="beforeUpload"
+        :on-success="onSuccess"
         action="/api/imgs/upload/common"
-        style="display: inline-block">
+        :show-file-list="false"
+        style="display: inline-block;margin-left: 10px">
         <el-button size="small" type="primary" plain style="display: inline-block">点击上传</el-button>
         <el-tooltip class="item" effect="dark" :content="name" placement="top-start">
             <i class="el-icon-question" style="color: #909399;font-size: 18px"></i>
@@ -26,6 +28,15 @@ export default {
             return false
         }else{
             return true
+        }
+    },
+    onSuccess(response) {
+        console.log(response)
+        if(response.ret == 0){
+            this.$message.success('上传成功！')
+            this.$emit('setSuccess')
+        }else{
+            this.$message.error(response.err)
         }
     }
   },

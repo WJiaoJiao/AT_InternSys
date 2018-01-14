@@ -43,9 +43,9 @@
                 </el-table-column>
             </el-table>
             <div style="width: 100%;text-align: center">
-                <el-button type="primary" plain @click="onSearchAll('loadmore')" :disabled="last_id ? false : true" style="width: 100%;margin-top: 30px" v-if="hasData && type=='normal' || type=='author'">加载更多</el-button>
+                <el-button type="primary" plain @click="onSearchAll('loadmore')" :disabled="last_id ? false : true" style="width: 100%;margin-top: 30px" v-if="hasData && searchType=='searchAll' || type=='author'">加载更多</el-button>
             </div>
-            <div style="margin: 20px 0;text-align: right">
+            <div style="margin: 20px 0;text-align: right" v-if="hasData">
                 <el-button @click="toggleSelection()" v-if="type != 'author'">取消选择</el-button>
                 <el-button type="primary" @click="homeShowAction" v-if="type == 2 || type == 3">设置在首页中显示</el-button>
                 <el-button type="primary" @click="addPaint" v-if="type==1 || type==2 || type==3 || type==4">添加画单</el-button>
@@ -101,7 +101,8 @@ export default {
         confirmAddDis: true,
         addButtonDis: true,
         last_id: '',
-        loading: false
+        loading: false,
+        searchType: ''
     }
   },
   methods: {
@@ -141,15 +142,20 @@ export default {
                     type: 'warning',
                     center: true
                 })
-                // let respData = await deleteNormalPaint({paint_ids: this.paint_ids})
+                let respData = await deleteNormalPaint({paint_ids: this.paint_ids})
                 this.$message.success('删除成功')
-                this.onSearch()
+                if(this.searchType == 'search'){
+                    this.onSearch()
+                }else{
+                    this.last_id = ''
+                    this.onSearchAll()
+                }
             }catch(e){
                 if (e != 'cancel') {this.$message.error(e.err)}
             }
         }else{
             try{
-                await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                await this.$confirm('确定要移除该画单吗?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning',
@@ -169,6 +175,7 @@ export default {
         }
     },
     async onSearch() {
+        this.searchType = 'search'
         this.$emit('setData',{paintList: [],type: 'search'});
         let id = this.formInline.id
         let keyWords = this.formInline.keyWords
@@ -207,6 +214,7 @@ export default {
         }
     },
     async onSearchAll(type) {
+        this.searchType = 'searchAll'
         if(this.type == 'author'){
             this.$emit('loadmore')
             return

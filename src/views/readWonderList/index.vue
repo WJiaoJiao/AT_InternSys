@@ -174,7 +174,7 @@ export default {
               type: 'warning',
               center: true
             })
-        //   let respData = await deleteCqList(that.cq_ids)
+          let respData = await deleteCqList({cq_ids: that.cq_ids})
           that.$message.success('删除成功！')
           this.getReadWonderList()
         }catch(e){
