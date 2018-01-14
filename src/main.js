@@ -3,11 +3,17 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import Element from 'element-ui'
+import '@/assets/index.less'
+import 'element-ui/lib/theme-chalk/index.css'
+import store from '@/store'
 
+Vue.use(Element,{ size: 'small' })
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
+  store,
   el: '#app',
   router,
   template: '<App/>',
