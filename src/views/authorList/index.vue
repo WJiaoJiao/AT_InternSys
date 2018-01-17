@@ -27,11 +27,15 @@ export default {
       }
       try{
         let respData = await getAuthorPaintList(data)
-        this.paintList = this.paintList.concat(respData.paint_list)
-        if(respData.last_id){
-          this.last_id = respData.last_id
+        if(respData.paint_list && respData.paint_list.length > 0){
+          this.paintList = this.paintList.concat(respData.paint_list)
+          if(respData.last_id){
+            this.last_id = respData.last_id
+          }else{
+            this.last_id = ''
+          }
         }else{
-          this.last_id = ''
+          this.$message('没有数据！')
         }
         console.log(respData)
       }catch(e){

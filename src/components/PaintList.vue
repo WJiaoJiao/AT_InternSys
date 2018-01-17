@@ -43,7 +43,7 @@
                 </el-table-column>
             </el-table>
             <div style="width: 100%;text-align: center">
-                <el-button type="primary" plain @click="onSearchAll('loadmore')" :disabled="last_id ? false : true" style="width: 100%;margin-top: 30px" v-if="hasData && searchType=='searchAll' || type=='author'">加载更多</el-button>
+                <el-button type="primary" plain @click="onSearchAll('loadmore')" :disabled="last_id ? false : true" style="width: 100%;margin-top: 30px" v-if="hasData && (searchType=='searchAll' || type=='author')">加载更多</el-button>
             </div>
             <div style="margin: 20px 0;text-align: right" v-if="hasData">
                 <el-button @click="toggleSelection()" v-if="type != 'author'">取消选择</el-button>
@@ -237,6 +237,8 @@ export default {
                 }else{
                     this.last_id = ''
                 }
+            }else{
+                this.$emit('setData',{paintList: [],type: 'searchAll'});
             }
         }catch(e){
             this.$message.error(e.err);
