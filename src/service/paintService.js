@@ -5,7 +5,7 @@ import request from '@/common/request'
 export const getPaintList = (param) => request.get('/api/painting/'+param+'/paint_list')
 
 // 拉取画单详情
-export const getPaintDetail = (param) => request.get('/api/painting/'+param+'/info')
+export const getPaintDetail = (param) => request.post('/api/painting/'+param.paintId+'/info',param.last_id)
 
 // 普通画单删除
 export const deleteNormalPaint= (param) => request.post('/api/painting/delete_list', param)

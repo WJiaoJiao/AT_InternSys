@@ -59,6 +59,9 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                <div style="width: 100%;text-align: center">
+                    <el-button type="primary" plain @click="getDetail('loadmore')" :disabled="last_id ? false : true" style="width: 100%;margin-top: 30px" v-if="pictureHasData">加载更多</el-button>
+                </div>
                 <div style="margin-top: 20px;text-align: right">
                     <el-button type="primary" @click="addPic">添加画作</el-button>
                     <el-button type="danger" @click="deletePic">删除画作</el-button>
@@ -169,7 +172,9 @@ export default {
       addButtonDis: true,
       add_picture_ids: [],
       detail_url_name: '',
-      type: ''
+      type: '',
+      last_id: '',
+      pictureHasData: false
     }
   },
   methods: {
@@ -188,10 +193,26 @@ export default {
         this.picture_url = picture_url
     },
     async getDetail(){
+        let data = {
+            paintId: this.$route.params.paintId
+        }
+        if(this.last_id){
+            data.last_id = {last_id: this.last_id}
+        }else{
+            data.last_id ={last_id: 0}
+        }
         try{
-            let respData = await getPaintDetail(this.$route.params.paintId)
+            let respData = await getPaintDetail(data)
+            if(respData.last_id){
+                this.last_id = respData.last_id
+            }else{
+                this.last_id = 0
+            }
             this.paintDetail = respData.paint_detail
-            this.picture_info = respData.paint_detail.picture_info
+            if(respData.paint_detail.picture_info.length > 0){
+                this.picture_info = this.picture_info.concat(respData.paint_detail.picture_info)
+                this.pictureHasData = true
+            }
             this.detail_url_name = decodeURI(respData.paint_detail.title_detail_url).split('/').pop()
         }catch(e){
             this.$message.error(e.err);
@@ -231,6 +252,8 @@ export default {
         try{
             let updatePaintData = await updatePaint(data);
             this.$message.success('修改成功！')
+            this.last_id = 0
+            this.picture_info = []
             this.getDetail()
         }catch(e){
             this.$message.error(e.err);
@@ -270,6 +293,8 @@ export default {
           }
           let respData = await addDeletePaint(data)
           this.$message.success('删除成功')
+          this.last_id = 0
+          this.picture_info = []
           this.getDetail()
       }catch(e){
           if (e != 'cancel') {this.$message.error(e.err)}
@@ -304,6 +329,8 @@ export default {
             let respData = await addDeletePaint(data)
             this.$message.success('添加成功！')
             this.addPictureVisible = false
+            this.last_id = 0
+            this.picture_info = []
             this.getDetail()
         }catch(e){
             this.$message.error(e.err)
