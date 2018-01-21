@@ -20,7 +20,7 @@ export const updatePaint = (param) => request.post('/api/painting/set_paint_info
 export const getPicInfo = (param) => request.get('/api/painting/picture/'+param+'/info')
 
 // 通过id查询画单
-export const getPaintListById = (param) => request.get('/api/painting/'+param+'/info')
+export const getPaintListById = (param) => request.post('/api/painting/'+param.paintId+'/info',param.last_id)
 
 // 通过关键词查询画单
 export const getPaintListByKw = (param) => request.get('/op/search/info?kw='+param)
