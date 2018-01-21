@@ -185,7 +185,7 @@ export default {
         }
         if(id){
             try{
-                let paintListData = await getPaintListById(id)
+                let paintListData = await getPaintListById({paintId: id,last_id: {last_id: 0}})
                 if(paintListData.paint_detail){
                     this.hasData = true
                     let paintList = [paintListData.paint_detail]
