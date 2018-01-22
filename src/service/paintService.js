@@ -32,7 +32,7 @@ export const getGrandCafeList = (param) => request.get('/op/discovery/get_mq_lis
 export const updateGrandCafe = (param) => request.post('/op/discovery/set_mq_info',param)
 
 // 删除大咖说
-export const deleteGrandCafe = (param) => request.get('/op/discovery/mq_delete',param)
+export const deleteGrandCafe = (param) => request.post('/op/discovery/mq_delete',param)
 
 // 拉取读精彩列表
 export const getReadWonderList = (param) => request.get('/api/discovery/get_cq_list')

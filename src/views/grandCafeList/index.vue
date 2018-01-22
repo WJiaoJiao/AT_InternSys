@@ -124,8 +124,10 @@ export default {
           confirmButtonText: '确定',
           callback: async action => {
             try{
-                let respData = await deleteGrandCafe(that.mq_ids)
+                let respData = await deleteGrandCafe({mq_ids: that.mq_ids})
                 that.$message.success('删除成功！')
+                that.mq_ids = []
+                this.getGrandCafeList()
             }catch(e){
                 this.$message.error(e.err)
             }

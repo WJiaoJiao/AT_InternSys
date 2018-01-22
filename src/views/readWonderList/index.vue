@@ -176,6 +176,7 @@ export default {
             })
           let respData = await deleteCqList({cq_ids: that.cq_ids})
           that.$message.success('删除成功！')
+          that.cq_ids = []
           this.getReadWonderList()
         }catch(e){
             if (e != 'cancel') {this.$message.error(e.err)}
