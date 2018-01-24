@@ -37,7 +37,6 @@ export default {
         }else{
           this.$message('没有数据！')
         }
-        console.log(respData)
       }catch(e){
         this.$message.error(e.err)
       }

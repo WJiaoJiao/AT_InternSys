@@ -9,7 +9,6 @@ instance.defaults.headers = {
 
 instance.interceptors.response.use(function (response) {
   // filter all response
-  console.log(response)
   if (response.status === 200) {
     if (response.data.ret === 0) {
       return response.data

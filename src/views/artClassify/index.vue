@@ -59,12 +59,10 @@ export default {
       let respData = await getArtHome();
       if(respData.art_home_page && respData.art_home_page.length > 0){
         this.artList = respData.art_home_page
-        console.log(this.artList)
       }else{
         this.$message('没有数据！');
       }
     }catch(e){
-      console.log(e)
       this.$message.error(e.err);
     }
   }

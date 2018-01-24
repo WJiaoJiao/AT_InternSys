@@ -22,7 +22,6 @@ export default {
   },
   methods: {
     uploadSuccess: function (response, file, fileList) {
-      console.log(response)
     },
     removeAction: function(){
       var tableData = this.tableData;

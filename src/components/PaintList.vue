@@ -22,7 +22,7 @@
                 <el-table-column type="selection" width="55" v-if="type != 'author'"></el-table-column>
                 <el-table-column label="封面" width="220">
                     <template slot-scope="scope">
-                        <img :src="scope.row.title_url ? scope.row.title_url : '../src/assets/bitmap.jpeg'" style="width: 200px;height: auto"/>
+                        <img :src="scope.row.title_url ? scope.row.title_url : ''" style="width: 200px;height: auto"/>
                     </template>
                 </el-table-column>
                 <el-table-column prop="paint_id" label="画单ID" width="100"></el-table-column>
@@ -114,7 +114,6 @@ export default {
       this.$router.push({path: `/paintDetail/${type}/${id}`})
     },
     handleSelectionChange(val) {
-        console.log(val)
         this.multipleSelection = val;
         let paint_ids = [];
         for(let v of val){
@@ -165,7 +164,6 @@ export default {
                     type_id: this.type == 2 ? 2 : this.type == 3 ? 3 : this.type == 1 ? 1 : this.type == 4 ? 4 : null,
                     cq_ids: this.paint_ids
                 }
-                console.log(data)
                 let respData = await deletePaint(data);
                 this.$message.success('删除成功')
                 this.$emit('setSuccess')
@@ -262,13 +260,11 @@ export default {
             type_id: Number(this.type),
             cq_ids: this.paint_ids
         }
-        console.log(data)
         try{
             let respData = await setPaintList(data);
             this.$message.success('设置成功！')
             this.paint_ids = []
             this.$emit('setSuccess')
-            console.log(respData)
         }catch(e){
             this.$message.error(e.err);
         }
@@ -311,7 +307,6 @@ export default {
             this.$message.success('添加成功！')
             this.addPaintVisible = false
             this.$emit('setSuccess')
-            console.log(respData)
         }catch(e){
             this.$message.error(e.err)
         }
@@ -351,7 +346,6 @@ export default {
           }
       },
       lastId: function(){
-          console.log(this.lastId)
           if(this.type == 'author' && this.lastId){
              this.last_id = this.lastId
           }
@@ -364,7 +358,6 @@ export default {
     if(this.type == 1 || this.type == 4 ){
         this.infoText = '请勾选至少一条数据！'
     }
-    console.log('type',this.type)
   }
 }
 </script>

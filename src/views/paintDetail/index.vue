@@ -179,7 +179,6 @@ export default {
   },
   methods: {
     onSubmit() {
-        console.log('submit!');
     },
     editThumbnailPic() {
         this.editThumbnailVisible = true
@@ -260,7 +259,6 @@ export default {
         }
     },
     editPicture(detail_url,picture_url) {
-        console.log(detail_url,picture_url)
         this.editPictureVisible = true
         this.detail_url = detail_url
         this.picture_url = picture_url
@@ -272,7 +270,6 @@ export default {
             picture_ids.push(v.picture_id)
         }
         this.picture_ids = picture_ids
-        console.log(this.picture_ids)
     },
     async deletePic() {
       if(this.picture_ids.length === 0){
@@ -377,7 +374,6 @@ export default {
   created() {
       let type = this.$route.params.type
       this.type = type
-      console.log(type)
       let title = ''
       if(type == 'lastedList'){
         title = '最新列表'

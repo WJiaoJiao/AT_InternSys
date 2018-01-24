@@ -95,7 +95,6 @@ export default {
         }
     },
     async saveAction() {
-        console.log(this.mq_detail)
         if(!this.mq_detail.mq_content){
             this.$message.warning('请填写内容！')
             return
@@ -110,7 +109,6 @@ export default {
         }
     },
     deleteGrandCafes() {
-        console.log(this.mq_ids)
         var that = this
         if(this.mq_ids.length > 10){
             this.$message.warning('一次最多删除10条数据！')

@@ -142,7 +142,6 @@ export default {
         }
     },
     async homeShowAction() {
-        console.log(this.cq_ids)
         if(this.cq_ids.length != 2){
             this.$message.warning('必须设置两条数据！')
             return
@@ -157,7 +156,6 @@ export default {
         }
     },
     async deleteGrandCafes() {
-        console.log(this.cq_ids)
         var that = this
         if(this.cq_ids.length > 10){
             this.$message.warning('一次最多删除10条数据！')

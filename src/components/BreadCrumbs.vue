@@ -15,7 +15,7 @@ export default {
   },
   watch: {
     breadcrumbs () {
-      console.log(this.breadcrumbs)
+      // console.log(this.breadcrumbs)
     }
   }
 }

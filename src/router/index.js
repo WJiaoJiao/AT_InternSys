@@ -16,6 +16,7 @@ import authorList from '@/views/authorList/index.vue'
 import artClassify from '@/views/artClassify/index.vue'
 import sceneClassify from '@/views/sceneClassify/index.vue'
 import emotionClassify from '@/views/emotionClassify/index.vue'
+import latestNews from '@/views/latestNews/index.vue'
 
 Vue.use(Router)
 
@@ -102,6 +103,11 @@ export default new Router({
       path: '/emotionClassify',
       name: 'emotionClassify',
       component: emotionClassify
+    },
+    {
+      path: '/latestNews',
+      name: 'latestNews',
+      component: latestNews
     }
   ]
 })
