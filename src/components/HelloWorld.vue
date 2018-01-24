@@ -17,13 +17,7 @@ export default {
     
   },
   async created(){
-    // try{
-    //   let test = await getLastedList();
-    //   console.log(test)
-    // }catch(e){
-    //   console.log(e)
-    //   this.$message.error(e.error);
-    // }
+
   }
 }
 </script>

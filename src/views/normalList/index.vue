@@ -18,7 +18,6 @@ export default {
   },
   methods: {
       setData(data) {
-          console.log(data)
           if(data.type == 'search'){
             this.paintList = data.paintList
           }else{

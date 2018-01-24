@@ -31,7 +31,6 @@ export default {
         }
     },
     onSuccess(response) {
-        console.log(response)
         if(response.ret == 0){
             this.$message.success('上传成功！')
             this.$emit('setSuccess')

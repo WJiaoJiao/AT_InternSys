@@ -59,12 +59,10 @@ export default {
       let respData = await getSceneHome();
       if(respData.scene_home_page && respData.scene_home_page.length > 0){
         this.sceneList = respData.scene_home_page
-        console.log(this.sceneList)
       }else{
         this.$message('没有数据！');
       }
     }catch(e){
-      console.log(e)
       this.$message.error(e.err);
     }
   }

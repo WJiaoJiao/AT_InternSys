@@ -58,6 +58,10 @@ export default {
           route: '/authorList'
         },
         {
+          title: '最新资讯',
+          route: '/latestNews'
+        },
+        {
           title: '首页推荐',
           route: 'paintClassify',
           children: [
@@ -154,6 +158,9 @@ export default {
     }
     if(path.indexOf('emotionClassify') > -1){
       this.defaultActive = '/emotionClassify'
+    }
+    if(path.indexOf('latestNews') > -1){
+      this.defaultActive = '/latestNews'
     }
   }
 }

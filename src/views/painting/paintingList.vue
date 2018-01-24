@@ -112,11 +112,9 @@
         }
       },
       handleSelectionChange(val) {
-        console.log(val)
         this.multipleSelection = val;
       },
       onSubmit() {
-        console.log('submit!');
       }
     }
   }

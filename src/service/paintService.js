@@ -56,16 +56,16 @@ export const addPaintList= (param) => request.post('/op/discovery/add_paint_list
 export const addDeletePaint= (param) => request.post('/op/painting/add_delete_paint', param)
 
 // 上传图片
-export const uploadPicture = (param) => request.post('/api/imgs/upload/common',param)
+export const uploadPicture = (param) => request.post('/api/imgs/upload/common', param)
 
 // 上传excel
-export const uploadExcel = (param) => request.post('/api/file/execl_upload',param)
+export const uploadExcel = (param) => request.post('/api/file/execl_upload', param)
 
 // 获取作者画单
-export const getAuthorPaintList = (param) => request.post('/op/painting/author_paint_list',param)
+export const getAuthorPaintList = (param) => request.post('/op/painting/author_paint_list', param)
 
 // 获取所有画单
-export const getAllPaintList = (param) => request.post('/op/painting/paint_list',param)
+export const getAllPaintList = (param) => request.post('/op/painting/paint_list', param)
 
 // 获取分类-艺术首页
 export const getArtHome = (param) => request.get('/api/classify/get_art_home')
@@ -75,3 +75,6 @@ export const getMoodHome = (param) => request.get('/api/classify/get_mood_home')
 
 // 获取分类-场景首页
 export const getSceneHome = (param) => request.get('/api/classify/get_scene_home')
+
+// 设置最新资讯
+export const setNewPaint = (param) => request.post('/op/painting/set_new_paint', param)

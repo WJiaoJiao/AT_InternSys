@@ -19,13 +19,11 @@ export default {
   },
   methods: {
     uploadSuccess: function (response, file, fileList) {
-      console.log(response)
     },
     removeAction: function(){
     },
     beforeAvatarUpload: function(file){
       const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
-      console.log(file.type)
       if (!isJPG) {
         this.$message.error('上传图片只能是 JPG或PNG 格式!');
       }

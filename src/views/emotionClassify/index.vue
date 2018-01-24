@@ -50,12 +50,10 @@ export default {
       let respData = await getMoodHome();
       if(respData.paints && respData.paints.length > 0){
         this.paints = respData.paints
-        console.log(this.paints)
       }else{
         this.$message('没有数据！');
       }
     }catch(e){
-      console.log(e)
       this.$message.error(e.err);
     }
   }

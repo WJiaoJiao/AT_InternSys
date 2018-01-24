@@ -28,9 +28,7 @@ export default {
   methods: {
     uploadThumbnail() {
       var that = this
-      console.log(this.thumbnailUrl)
       let fileName = decodeURI(this.thumbnailUrl).split('/').pop()
-      console.log(fileName)
       this.cropper.getCroppedCanvas().toBlob(async function (blob) {
         var formData = new FormData()
         formData.append('file', blob, fileName)
@@ -53,7 +51,6 @@ export default {
   },
   watch: {
     visible: function(){
-      console.log(this)
       if(this.visible){
         var that = this;
         this.$nextTick(_ => {
