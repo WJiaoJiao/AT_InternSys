@@ -11,11 +11,10 @@
                 <el-table-column prop="cq_id" label="编号" width="100"></el-table-column>
                 <el-table-column prop="cq_title" label="标题" width="200"></el-table-column>
                 <el-table-column prop="cq_content" label="简介"></el-table-column>
-                <el-table-column label="h5链接地址" width="100">
+                <el-table-column label="h5图片" width="200">
                     <template slot-scope="scope">
-                        <el-tooltip class="item" effect="dark" :content="scope.row.cq_h5_url" placement="top-start">
-                            <el-button @click="openUrl(scope.row.cq_h5_url)">点击查看</el-button>
-                        </el-tooltip>
+                        <el-button type="primary" plain @click="showH5Img(scope.row.cq_h5_url)">预览</el-button>
+                        <upload-detail :src="scope.row.cq_h5_url" @setSuccess="setSuccess"></upload-detail>
                     </template>
                 </el-table-column>
                 <el-table-column label="是否在首页中展示" width="120">
@@ -51,14 +50,12 @@
                     <el-form-item label="简介">
                         <el-input type="textarea" v-model="cq_detail.cq_content"></el-input>
                     </el-form-item>
-                    <el-form-item label="h5链接地址">
-                        <el-input v-model="cq_detail.cq_h5_url"></el-input>
-                    </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
                     <el-button type="primary" @click="saveAction">保存</el-button>
                 </span>
             </el-dialog>
+            <preview-img title="预览H5图片" :visible="h5PicVisible" :src="cq_h5_url" @close="()=>{this.h5PicVisible = false}"></preview-img>
       </el-card>
     </div>
 </template>
@@ -66,8 +63,14 @@
 <script>
 import * as types from '@/store/types'
 import {getReadWonderList,setPoineerCq,setCqList,deleteCqList} from '@/service/paintService.js'
+import PreviewImg from '@/components/PreviewImg.vue'
+import UploadDetail from '@/components/UploadDetail.vue'
 export default {
   name: 'GrandCafeList',
+  components:{
+    'preview-img': PreviewImg,
+    UploadDetail
+  },
   data () {
     return {
         multipleSelection: [],
@@ -76,6 +79,8 @@ export default {
         classic_quote: [],
         editVisible: false,
         cq_detail: {},
+        h5PicVisible: false,
+        cq_h5_url: ''
     }
   },
   methods: {
@@ -122,15 +127,10 @@ export default {
             this.$message.warning('请填写简介！')
             return
         }
-        if(!this.cq_detail.cq_h5_url){
-            this.$message.warning('请填写H5链接地址！')
-            return
-        }
         let data = {
             cq_id: this.cq_detail.cq_id,
             cq_title: this.cq_detail.cq_title,
-            cq_content: this.cq_detail.cq_content,
-            cq_h5_url: this.cq_detail.cq_h5_url
+            cq_content: this.cq_detail.cq_content
         }
         try{
             let respData = await setCqList(data)
@@ -180,10 +180,14 @@ export default {
             if (e != 'cancel') {this.$message.error(e.err)}
         }
     },
-    openUrl(cq_h5_url) {
-        window.open(cq_h5_url)
-    },
     close() {
+        this.getReadWonderList()
+    },
+    showH5Img(cq_h5_url) {
+        this.h5PicVisible = true
+        this.cq_h5_url = cq_h5_url
+    },
+    setSuccess() {
         this.getReadWonderList()
     }
   },

@@ -5,7 +5,7 @@
       @close="close"
       width="645px">
       <div class="inlineBlock" v-if="visible">
-        <img class="app-image" crossOrigin="anonymous" :src="src" style="max-width: 100%;width:300px;height:auto"/>
+        <img class="app-image" crossOrigin="anonymous" :src="src+'?t='+(new Date().getTime())" style="max-width: 100%;width:300px;height:auto"/>
       </div>
       <div class="inlineBlock" style="vertical-align: top">
         <img class="block app-temp" width="300"  height="auto" />
