@@ -13,7 +13,7 @@
           :index="subMenu.route">{{subMenu.title}}</el-menu-item>
         </el-submenu>
     </template>
-    <img :src="logo" style="margin-top: 7px;float: right"/>
+    <img src="static/logo.png" style="margin-top: 7px;float: right"/>
     <!--<el-button type="primary" style="margin-top: 14px;float: right" @click="dialogVisible = true">登录</el-button>-->
     <el-dialog
       title="登录"
@@ -30,13 +30,11 @@
 </template>
 
 <script>
-import logo from '@/assets/logo.png'
 export default {
   data () {
     return {
       defaultActive: '/',
       dialogVisible: false,
-      logo: logo,
       menus: [
         {
           title: '上传',
