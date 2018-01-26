@@ -163,6 +163,9 @@ export default {
     if(path.indexOf('latestNews') > -1){
       this.defaultActive = '/latestNews'
     }
+    if(path.indexOf('authorList') > -1){
+      this.defaultActive = '/authorList'
+    }
   }
 }
 </script>
