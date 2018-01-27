@@ -49,7 +49,7 @@
                 <el-button @click="toggleSelection()" v-if="type != 'author'">取消选择</el-button>
                 <el-button type="primary" @click="homeShowAction" v-if="type == 2 || type == 3">设置在首页中显示</el-button>
                 <el-button type="primary" @click="addPaint" v-if="type==1 || type==2 || type==3 || type==4">添加画单</el-button>
-                <el-button type="danger" @click="deletePaints" v-if="type != 'author'">删除</el-button>
+                <el-button type="danger" @click="deletePaints" v-if="type != 'author'">{{type == 'normal' ? '删除画单' : '移除画单'}}</el-button>
             </div>
             <el-dialog title="添加画单" :visible.sync="addPaintVisible" width="440px" @close="closeDialogAction">
                 <el-form :inline="true" class="demo-form-inline" ref="addPaintForm">
@@ -126,7 +126,7 @@ export default {
     },
     async deletePaints() {
         if(this.paint_ids.length === 0){
-            this.$message.warning('请选择需要删除的画单！')
+            this.$message.warning('请选择需要'+(this.type == 'normal' ? '删除' : '移除')+'的画单！')
             return
         }
         if(this.paint_ids.length > 10){

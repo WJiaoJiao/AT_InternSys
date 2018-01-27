@@ -64,7 +64,7 @@
                 </div>
                 <div style="margin-top: 20px;text-align: right">
                     <el-button type="primary" @click="addPic">添加画作</el-button>
-                    <el-button type="danger" @click="deletePic">删除画作</el-button>
+                    <el-button type="danger" @click="deletePic">移除画作</el-button>
                 </div>
                 <div style="margin-top: 20px;text-align: right" v-if="type != 'emotionClassify' && type != 'artClassify' && type != 'artClassify' && type!='sceneClassify'">
                     <el-button type="primary" @click="save">保存</el-button>
@@ -277,7 +277,7 @@ export default {
         return
       }
       try{
-          await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          await this.$confirm('确定要移除该画作吗?', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               type: 'warning',
@@ -427,7 +427,7 @@ export default {
             }
         ])
       }
-      
+
       this.getDetail()
   }
 }
