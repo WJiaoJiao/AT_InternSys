@@ -24,17 +24,23 @@ export default {
   },
   methods: {
     async onSubmit() {
-        if(!this.formInline.paint_id){
-            this.$message.warning('请填写所要设置的画单ID！')
-            return
-        }
-        try{
-            let respData = await setNewPaint({paint_id: Number(this.formInline.paint_id)})
-            this.$message.success('设置成功！')
-            this.formInline = {}
-        }catch(e){
-            this.$message.error(e.err)
-        }
+      if(!this.formInline.paint_id){
+          this.$message.warning('请填写所要设置的画单ID！')
+          return
+      }
+      try{
+        await this.$confirm('确定要设置最新资讯吗?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+            center: true
+        })
+        let respData = await setNewPaint({paint_id: Number(this.formInline.paint_id)})
+        this.$message.success('设置成功！')
+        this.formInline = {}
+      }catch(e){
+          if (e != 'cancel') {this.$message.error(e.err)}
+      }
     }
   },
   async created(){
