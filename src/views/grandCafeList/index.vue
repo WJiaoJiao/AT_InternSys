@@ -23,6 +23,7 @@
             <el-dialog
                 title="修改"
                 :visible.sync="editVisible"
+                @close="close"
                 width="50%">
             <el-form label-position="left" label-width="140px" :model="mq_detail">
                 <el-form-item label="编号">
@@ -131,8 +132,10 @@ export default {
             }
           }
         });
-
-    }
+    },
+    close() {
+        this.getGrandCafeList()
+    },
   },
   created(){
       this.$store.commit(types.SET_BREADCRUMBS, [
