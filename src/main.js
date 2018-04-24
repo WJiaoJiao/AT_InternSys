@@ -7,15 +7,29 @@ import Element from 'element-ui'
 import '@/assets/index.less'
 import 'element-ui/lib/theme-chalk/index.css'
 import store from '@/store'
+import {Ch} from '@/assets/translate/Chinese.js'
+import {En} from  '@/assets/translate/English.js'
+import VueI18n from 'vue-i18n'
 
 Vue.use(Element,{ size: 'small' })
 Vue.config.productionTip = false
+Vue.use(VueI18n)
+
+var locale = localStorage.getItem('language') ? localStorage.getItem('language') : 'Chinese'
+const i18n = new VueI18n({
+  locale: locale, // 语言标识
+  messages:{
+    Chinese : Ch,
+    English : En
+  }
+})
 
 /* eslint-disable no-new */
 new Vue({
   store,
   el: '#app',
   router,
+  i18n,
   template: '<App/>',
   components: { App }
 })

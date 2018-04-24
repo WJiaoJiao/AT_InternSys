@@ -35,7 +35,7 @@ export default {
             this.last_id = ''
           }
         }else{
-          this.$message('没有数据！')
+          this.$message(this.$t('message.noData'))
         }
       }catch(e){
         this.$message.error(e.err)
@@ -45,14 +45,24 @@ export default {
 
     }
   },
-  created(){
-      this.$store.commit(types.SET_BREADCRUMBS, [
+  computed: {
+    breadCrumbs : function(){
+      return  [
         {
-            title: '作者画单列表'
-        }]
-      )
-      this.getAuthorPaintList()
+            title: this.$t('message.menuAuthorPainting')
+        }
+      ]
+    }
   },
+  watch: {
+    breadCrumbs: function (newValue, oldValue) {
+      this.$store.commit(types.SET_BREADCRUMBS, newValue)
+    }
+  },
+  created() {
+     this.$store.commit(types.SET_BREADCRUMBS, this.breadCrumbs)
+     this.getAuthorPaintList()
+  }
 }
 </script>
 

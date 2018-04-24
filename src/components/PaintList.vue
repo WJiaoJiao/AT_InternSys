@@ -3,42 +3,42 @@
       <el-card>
             <div slot="header" v-if="isSearch">
                 <el-form :inline="true" :model="formInline" class="demo-form-inline">
-                    <el-form-item label="画单ID">
-                        <el-input v-model="formInline.id" placeholder="画单ID"></el-input>
+                    <el-form-item :label="$t('message.paint')+'ID'">
+                        <el-input v-model="formInline.id" :placeholder="$t('message.paint')+'ID'"></el-input>
                     </el-form-item>
-                    <el-form-item label="关键词">
-                        <el-input v-model="formInline.keyWords" placeholder="关键词"></el-input>
+                    <el-form-item :label="$t('message.keyword')">
+                        <el-input v-model="formInline.keyWords" :placeholder="$t('message.keyword')"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="onSearch">查询</el-button>
-                        <el-tooltip class="item" effect="dark" content="若同时填写了编号和关键词，编号查询优先！" placement="top-start">
+                        <el-button type="primary" @click="onSearch">{{$t('message.search')}}</el-button>
+                        <el-tooltip class="item" effect="dark" :content="$t('message.searchInfo')" placement="top-start">
                             <i class="el-icon-question" style="color: #909399;font-size: 18px"></i>
                         </el-tooltip>
                     </el-form-item>
-                    <el-button type="primary" @click="onSearchAll" class="fr">查询所有画单</el-button>
+                    <el-button type="primary" @click="onSearchAll" class="fr">{{$t('message.searchAllThePaintings')}}</el-button>
                 </el-form>
             </div>
-            <el-table stripe border ref="multipleTable" :data="paintList" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange" v-if="hasData" v-loading="loading">
+            <el-table stripe border ref="multipleTable" :data="paintList" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange" v-if="hasData" v-loading="loading" :empty-text="$t('message.noData')">
                 <el-table-column type="selection" width="55" v-if="type != 'author'"></el-table-column>
-                <el-table-column label="封面" width="220">
+                <el-table-column :label="$t('message.cover')" width="220">
                     <template slot-scope="scope">
                         <img :src="scope.row.title_url ? scope.row.title_url : ''" style="width: 200px;height: auto"/>
                     </template>
                 </el-table-column>
-                <el-table-column prop="paint_id" label="画单ID" width="100"></el-table-column>
-                <el-table-column prop="paint_title" label="标题"></el-table-column>
-                <el-table-column prop="read_num" label="阅读数量" width="100"></el-table-column>
-                <el-table-column prop="collect_num" label="收藏数量" width="100"></el-table-column>
-                <el-table-column prop="picture_num" label="作品张数" width="100"></el-table-column>
-                <el-table-column prop="flag" label="是否在首页中展示" width="120" v-if="type == 2 || type == 3">
+                <el-table-column prop="paint_id" :label="$t('message.paint')+'ID'" width="120"></el-table-column>
+                <el-table-column prop="paint_title" :label="$t('message.title')"></el-table-column>
+                <el-table-column prop="read_num" :label="$t('message.readNumber')" width="120"></el-table-column>
+                <el-table-column prop="collect_num" :label="$t('message.collectNumber')" width="120"></el-table-column>
+                <el-table-column prop="picture_num" :label="$t('message.pictureNumber')" width="120"></el-table-column>
+                <el-table-column prop="flag" :label="$t('message.showOnTheFrontPage')" width="120" v-if="type == 2 || type == 3">
                     <template slot-scope="scope">
-                        <span style="color: #409EFF">{{scope.row.flag ? scope.row.flag === 1 ? '是' : '' : ''}}</span>
-                        <span>{{scope.row.flag ? scope.row.flag === 2 ? '否' : '' : ''}}</span>
+                        <span style="color: #409EFF">{{scope.row.flag ? scope.row.flag === 1 ? $t('message.yes') : '' : ''}}</span>
+                        <span>{{scope.row.flag ? scope.row.flag === 2 ? $t('message.no') : '' : ''}}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="flag" label="操作" show-overflow-tooltip width="100">
+                <el-table-column prop="flag" :label="$t('message.operate')" show-overflow-tooltip width="100">
                     <template  slot-scope="scope">
-                        <el-button type="primary" plain @click="showDetail(scope.row.paint_id)">查看详情</el-button>
+                        <el-button type="primary" plain @click="showDetail(scope.row.paint_id)">{{$t('message.details')}}</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -46,30 +46,30 @@
                 <el-button type="primary" plain @click="onSearchAll('loadmore')" :disabled="last_id ? false : true" style="width: 100%;margin-top: 30px" v-if="hasData && (searchType=='searchAll' || type=='author')">加载更多</el-button>
             </div>
             <div style="margin: 20px 0;text-align: right" v-if="hasData">
-                <el-button @click="toggleSelection()" v-if="type != 'author'">取消选择</el-button>
-                <el-button type="primary" @click="homeShowAction" v-if="type == 2 || type == 3">设置在首页中显示</el-button>
-                <el-button type="primary" @click="addPaint" v-if="type==1 || type==2 || type==3 || type==4">添加画单</el-button>
-                <el-button type="danger" @click="deletePaints" v-if="type != 'author'">删除</el-button>
+                <el-button @click="toggleSelection()" v-if="type != 'author'">{{$t('message.cancle')}}</el-button>
+                <el-button type="primary" @click="homeShowAction" v-if="type == 2 || type == 3">{{$t('message.setShowOnTheFrontPage')}}</el-button>
+                <el-button type="primary" @click="addPaint" v-if="type==1 || type==2 || type==3 || type==4">{{$t('message.add')}}{{$t('message.paint')}}</el-button>
+                <el-button type="danger" @click="deletePaints" v-if="type != 'author'">{{$t('message.delete')}}</el-button>
             </div>
-            <el-dialog title="添加画单" :visible.sync="addPaintVisible" width="440px" @close="closeDialogAction">
+            <el-dialog :title="$t('message.add')+$t('message.paint')" :visible.sync="addPaintVisible" width="440px" @close="closeDialogAction">
                 <el-form :inline="true" class="demo-form-inline" ref="addPaintForm">
-                    <el-form-item label="画单ID" label-width="120px">
+                    <el-form-item :label="$t('message.paint')+'ID'" label-width="100px">
                         <el-input v-model="addPaintId"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="confirmPaintId" :disabled="confirmAddDis">确认</el-button>
+                        <el-button type="primary" @click="confirmPaintId" :disabled="confirmAddDis">{{$t('message.confirm')}}</el-button>
                     </el-form-item>
                 </el-form>
-                <el-table :data="addPaintIds">
-                    <el-table-column property="add_paint_id" label="画单ID" width="350"></el-table-column>
-                    <el-table-column  property="add_paint_id" label="删除">
+                <el-table :data="addPaintIds" :empty-text="$t('message.noData')">
+                    <el-table-column property="add_paint_id" :label="$t('message.paint')+'ID'" align="left"></el-table-column>
+                    <el-table-column  property="add_paint_id" :label="$t('message.delete')" align="right">
                         <template slot-scope="scope">
                             <i class="el-icon-close" style="font-size: 20px" @click="deleteAddPaints(scope.row.add_paint_id)"></i>
                         </template>
                     </el-table-column>
                 </el-table>
                  <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="addPaintAction" :disabled="addButtonDis">添 加</el-button>
+                    <el-button type="primary" @click="addPaintAction" :disabled="addButtonDis">{{$t('message.add')}}</el-button>
                 </span>
             </el-dialog>
       </el-card>
@@ -108,7 +108,7 @@ export default {
   methods: {
     showDetail (id) {
       let breads = [...this.$store.state.common.breadcrumbs]
-      breads.push({title: '详情'})
+      breads.push({title: this.$t('message.detail')})
       this.$store.commit(types.SET_BREADCRUMBS, breads)
       let type = document.location.hash.split('/')[1];
       this.$router.push({path: `/paintDetail/${type}/${id}`})
@@ -126,23 +126,23 @@ export default {
     },
     async deletePaints() {
         if(this.paint_ids.length === 0){
-            this.$message.warning('请选择需要删除的画单！')
+            this.$message.warning(this.$t('message.deletePaintsInfo'))
             return
         }
         if(this.paint_ids.length > 10){
-            this.$message.warning('一次最多删除10条数据！')
+            this.$message.warning(this.$t('message.deletePaintsLimitInfo'))
             return
         }
         if(this.type == 'normal'){
             try{
-                await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                await this.$confirm(this.$t('message.deleteWarning'), this.$t('message.prompt'), {
+                    confirmButtonText: this.$t('message.confirm'),
+                    cancelButtonText: this.$t('message.cancle'),
                     type: 'warning',
                     center: true
                 })
                 let respData = await deleteNormalPaint({paint_ids: this.paint_ids})
-                this.$message.success('删除成功')
+                this.$message.success(this.$t('message.deleteSuccess'))
                 if(this.searchType == 'search'){
                     this.onSearch()
                 }else{
@@ -154,9 +154,9 @@ export default {
             }
         }else{
             try{
-                await this.$confirm('确定要移除该画单吗?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                await this.$confirm(this.$t('message.removeWarning'), this.$t('message.prompt'), {
+                    confirmButtonText: this.$t('message.confirm'),
+                    cancelButtonText: this.$t('message.cancle'),
                     type: 'warning',
                     center: true
                 })
@@ -165,7 +165,7 @@ export default {
                     cq_ids: this.paint_ids
                 }
                 let respData = await deletePaint(data);
-                this.$message.success('删除成功')
+                this.$message.success(this.$t('message.removeSuccess'))
                 this.$emit('setSuccess')
             }catch(e){
                 if (e != 'cancel') {this.$message.error(e.err)}
@@ -275,12 +275,12 @@ export default {
     confirmPaintId() {
         for(let i = 0; i < this.addPaintIds.length; i++){
             if(this.addPaintId == this.addPaintIds[i].add_paint_id){
-                this.$message.warning('请不要重复添加！')
+                this.$message.warning(this.$t('message.noRepeatAdd'))
                 return
             }
         }
         if (!this.checkNumber(this.addPaintId)) {
-            this.$message.warning('请输入数字!')
+            this.$message.warning(this.$t('message.enterNumber'))
             return
         }
         this.add_paint_ids.push(Number(this.addPaintId))
@@ -304,7 +304,7 @@ export default {
         }
         try{
             let respData = await addPaintList(data)
-            this.$message.success('添加成功！')
+            this.$message.success(this.$t('message.addSuccess'))
             this.addPaintVisible = false
             this.$emit('setSuccess')
         }catch(e){
@@ -353,10 +353,10 @@ export default {
   },
   async created(){
     if(this.type == 2 || this.type == 3 ){
-        this.infoText = '必须设置两条数据！'
+        this.infoText = this.$t('message.setTwoData')
     }
     if(this.type == 1 || this.type == 4 ){
-        this.infoText = '请勾选至少一条数据！'
+        this.infoText = this.$t('message.checkOneData')
     }
   }
 }

@@ -3,8 +3,8 @@
       <el-card>
         <el-upload class="upload-demo" drag action="/api/imgs/upload/common" multiple :on-success="uploadSuccess" :on-remove="removeAction" :before-upload="beforeAvatarUpload">
             <i class="el-icon-upload"></i>
-            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-            <div class="el-upload__tip" slot="tip">只能上传jpg/png文件</div>
+            <div class="el-upload__text">{{$t('message.dragTheFileHere')}}，{{$t('message.or')}} <em>{{$t('message.clickUpload')}}</em></div>
+            <div class="el-upload__tip" slot="tip">{{$t('message.onlyUpload')}} jpg/png {{$t('message.file')}}</div>
         </el-upload>
       </el-card>
     </div>
@@ -25,21 +25,30 @@ export default {
     beforeAvatarUpload: function(file){
       const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
       if (!isJPG) {
-        this.$message.error('上传图片只能是 JPG或PNG 格式!');
+        this.$message.error(this.$t('message.uploadImageInfo'));
       }
       return isJPG;
     }
   },
-  created(){
-    this.$store.commit(types.SET_BREADCRUMBS, [
+  computed: {
+    breadCrumbs : function(){
+      return [
           {
-              title: '上传'
+              title: this.$t('message.menuUpload')
           },
           {
-              title: '上传图片'
+              title: this.$t('message.menuUploadImage')
           }
       ]
-    )
+    }
+  },
+  watch: {
+    breadCrumbs: function (newValue, oldValue) {
+      this.$store.commit(types.SET_BREADCRUMBS, newValue)
+    }
+  },
+  created() {
+     this.$store.commit(types.SET_BREADCRUMBS, this.breadCrumbs)
   }
 }
 </script>

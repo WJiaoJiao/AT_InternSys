@@ -6,7 +6,7 @@
         action="/api/imgs/upload/common"
         :show-file-list="false"
         style="display: inline-block;margin-left: 10px">
-        <el-button size="small" type="primary" plain style="display: inline-block">点击上传</el-button>
+        <el-button size="small" type="primary" plain style="display: inline-block">{{$t('message.clickUpload')}}</el-button>
         <el-tooltip class="item" effect="dark" :content="name" placement="top-start">
             <i class="el-icon-question" style="color: #909399;font-size: 18px"></i>
         </el-tooltip>

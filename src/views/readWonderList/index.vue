@@ -3,59 +3,59 @@
       <el-card>
             <el-table stripe border ref="multipleTable" :data="classic_quote" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange" v-if="hasData">
                 <el-table-column type="selection" width="55"></el-table-column>
-                <el-table-column label="图标" width="170">
+                <el-table-column :label="$t('message.icon')" width="170">
                     <template slot-scope="scope">
                         <img :src="scope.row.cq_img_url" style="width: 150px;height: auto"/>
                     </template>
                 </el-table-column>
-                <el-table-column prop="cq_id" label="编号" width="100"></el-table-column>
-                <el-table-column prop="cq_title" label="标题" width="200"></el-table-column>
-                <el-table-column prop="cq_content" label="简介"></el-table-column>
-                <el-table-column label="h5图片" width="200">
+                <el-table-column prop="cq_id" :label="$t('message.id')" width="100"></el-table-column>
+                <el-table-column prop="cq_title" :label="$t('message.title')" width="200"></el-table-column>
+                <el-table-column prop="cq_content" :label="$t('message.introduction')"></el-table-column>
+                <el-table-column :label="'H5 ' + $t('message.picture')" width="240">
                     <template slot-scope="scope">
-                        <el-button type="primary" plain @click="showH5Img(scope.row.cq_h5_url)">预览</el-button>
+                        <el-button type="primary" plain @click="showH5Img(scope.row.cq_h5_url)">{{$t('message.preview')}}</el-button>
                         <upload-detail :src="scope.row.cq_h5_url" @setSuccess="setSuccess"></upload-detail>
                     </template>
                 </el-table-column>
-                <el-table-column label="是否在首页中展示" width="120">
+                <el-table-column :label="$t('message.showOnTheFrontPage')" width="120">
                     <template slot-scope="scope">
-                        <span>{{scope.row.flag ? scope.row.flag === 1 ? '是' : '否' : ''}}</span>
+                        <span>{{scope.row.flag ? scope.row.flag === 1 ? $t('message.yes') : $t('message.no') : ''}}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" show-overflow-tooltip width="100">
+                <el-table-column :label="$t('message.operate')" show-overflow-tooltip width="100">
                     <template  slot-scope="scope">
-                        <el-button type="primary" plain @click="editAction(scope.row)">修改</el-button>
+                        <el-button type="primary" plain @click="editAction(scope.row)">{{$t('message.modify')}}</el-button>
                     </template>
                 </el-table-column>
             </el-table>
             <div style="margin: 20px 0;text-align: right" v-if="hasData">
-                <el-button @click="toggleSelection()">取消选择</el-button>
-                <el-tooltip class="item" effect="dark" content="必须设置两条数据！" placement="top-start">
-                    <el-button type="primary" @click="homeShowAction">设置在首页中显示</el-button>
+                <el-button @click="toggleSelection()">{{$t('message.cancle')}}</el-button>
+                <el-tooltip class="item" effect="dark" :content="$t('message.setTwoData')" placement="top-start">
+                    <el-button type="primary" @click="homeShowAction">{{$t('message.setShowOnTheFrontPage')}}</el-button>
                 </el-tooltip>
-                <el-button type="danger" @click="deleteGrandCafes">删除</el-button>
+                <el-button type="danger" @click="deleteGrandCafes">{{$t('message.delete')}}</el-button>
             </div>
             <el-dialog
-                title="修改"
+                :title="$t('message.modify')"
                 :visible.sync="editVisible"
                 @close="close"
                 width="50%">
                 <el-form label-position="left" label-width="140px" :model="cq_detail">
-                    <el-form-item label="编号">
+                    <el-form-item :label="$t('message.id')">
                         <el-input v-model="cq_detail.cq_id" disabled></el-input>
                     </el-form-item>
-                    <el-form-item label="标题">
+                    <el-form-item :label="$t('message.title')">
                         <el-input v-model="cq_detail.cq_title"></el-input>
                     </el-form-item>
-                    <el-form-item label="简介">
+                    <el-form-item :label="$t('message.introduction')">
                         <el-input type="textarea" v-model="cq_detail.cq_content"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="saveAction">保存</el-button>
+                    <el-button type="primary" @click="saveAction">{{$t('message.save')}}</el-button>
                 </span>
             </el-dialog>
-            <preview-img title="预览H5图片" :visible="h5PicVisible" :src="cq_h5_url" @close="()=>{this.h5PicVisible = false}"></preview-img>
+            <preview-img :title="$t('message.preview')+' H5 '+$t('message.picture')" :visible="h5PicVisible" :src="cq_h5_url" @close="()=>{this.h5PicVisible = false}"></preview-img>
       </el-card>
     </div>
 </template>
@@ -66,7 +66,7 @@ import {getReadWonderList,setPoineerCq,setCqList,deleteCqList} from '@/service/p
 import PreviewImg from '@/components/PreviewImg.vue'
 import UploadDetail from '@/components/UploadDetail.vue'
 export default {
-  name: 'GrandCafeList',
+  name: 'ReadWonderList',
   components:{
     'preview-img': PreviewImg,
     UploadDetail
@@ -86,7 +86,7 @@ export default {
   methods: {
     showDetail (id) {
       let breads = [...this.$store.state.common.breadcrumbs]
-      breads.push({title: '详情'})
+      breads.push({title: this.$t('message.detail')})
       this.$store.commit(types.SET_BREADCRUMBS, breads)
       let type = document.location.hash.split('/')[1];
       this.$router.push({path: `/paintDetail/${type}/${id}`})
@@ -112,7 +112,7 @@ export default {
             if(respData.classic_quote && respData.classic_quote.length > 0){
                 this.classic_quote = respData.classic_quote
             }else{
-                this.$message('没有数据！')
+                this.$message(this.$t('message.noData'))
             }
         }catch(e){
             this.$message.error(e.err);
@@ -120,11 +120,11 @@ export default {
     },
     async saveAction() {
         if(!this.cq_detail.cq_title){
-            this.$message.warning('请填写标题！')
+            this.$message.warning(this.$t('message.fillTitle'))
             return
         }
         if(!this.cq_detail.cq_content){
-            this.$message.warning('请填写简介！')
+            this.$message.warning(this.$t('message.fillIntro'))
             return
         }
         let data = {
@@ -134,7 +134,7 @@ export default {
         }
         try{
             let respData = await setCqList(data)
-            this.$message.success('保存成功！')
+            this.$message.success(this.$t('message.saveSuccess'))
             this.editVisible = false
             this.getReadWonderList()
         }catch(e){
@@ -143,12 +143,12 @@ export default {
     },
     async homeShowAction() {
         if(this.cq_ids.length != 2){
-            this.$message.warning('必须设置两条数据！')
+            this.$message.warning(this.$t('message.setTwoData'))
             return
         }
         try{
             let respData = await setPoineerCq({cq_ids: this.cq_ids})
-            this.$message.success('设置成功')
+            this.$message.success(this.$t('message.setUpSuccess'))
             this.cq_ids = []
             this.getReadWonderList()
         }catch(e){
@@ -158,22 +158,22 @@ export default {
     async deleteGrandCafes() {
         var that = this
         if(this.cq_ids.length > 10){
-            this.$message.warning('一次最多删除10条数据！')
+            this.$message.warning(this.$t('message.deletePaintsLimitInfo'))
             return
         }
         if(this.cq_ids.length === 0){
-            this.$message.warning('请勾选所要删除的数据！')
+            this.$message.warning(this.$t('message.deleteDataInfo'))
             return
         }
         try{
-            await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
+            await this.$confirm(this.$t('message.deleteWarning'), this.$t('message.prompt'), {
+              confirmButtonText: this.$t('message.confirm'),
+              cancelButtonText: this.$t('message.cancle'),
               type: 'warning',
               center: true
             })
           let respData = await deleteCqList({cq_ids: that.cq_ids})
-          that.$message.success('删除成功！')
+          that.$message.success(this.$t('message.deleteSuccess'))
           that.cq_ids = []
           this.getReadWonderList()
         }catch(e){
@@ -191,14 +191,14 @@ export default {
         this.getReadWonderList()
     }
   },
-  async created(){
-      this.$store.commit(types.SET_BREADCRUMBS, [
-            {
-                title: '读精彩列表'
-            }
-        ]
-      )
-      this.getReadWonderList()
+  computed: {
+    breadCrumbs : function(){
+      return  [
+          {
+              title: this.$t('message.menuReadWonder')
+          }
+      ]
+    }
   },
   watch: {
       classic_quote: function() {
@@ -207,7 +207,14 @@ export default {
           }else{
               this.hasData = false
           }
+      },
+      breadCrumbs: function (newValue, oldValue) {
+          this.$store.commit(types.SET_BREADCRUMBS, newValue)
       }
+  },
+  created() {
+     this.$store.commit(types.SET_BREADCRUMBS, this.breadCrumbs)
+     this.getReadWonderList()
   }
 }
 </script>

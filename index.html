@@ -10,3 +10,9 @@
     <!-- built files will be auto injected -->
   </body>
 </html>
+
+<script>
+  var language = localStorage.getItem('language')
+  var title = localStorage.getItem('language') ? localStorage.getItem('language') === 'Chinese' ? '墨染' : 'Moran' : '墨染'
+  document.title = title;
+</script>

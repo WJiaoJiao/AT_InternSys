@@ -23,7 +23,7 @@ export default {
         if(painttListData.paint_arry.length > 0){
           this.painttList = painttListData.paint_arry
         }else{
-          this.$message('没有数据！');
+          this.$message(this.$t('message.noData'));
         }
       }catch(e){
         this.$message.error(e.err);
@@ -33,19 +33,29 @@ export default {
       this.getPaintList()
     }
   },
-  async created(){
-    this.$store.commit(types.SET_BREADCRUMBS, [
-      {
-        title: '首页推荐'
-      },
-      {
-        to: {
-          path: '/hottestList'
+  computed: {
+    breadCrumbs : function(){
+      return  [
+        {
+          title: this.$t('message.menuRecommend')
         },
-        title: '最热列表'
-      }
-    ])
-    this.getPaintList()
+        {
+          to: {
+            path: '/hottestList'
+          },
+          title: this.$t('message.menuHottest')
+        }
+      ]
+    }
+  },
+  watch: {
+    breadCrumbs: function (newValue, oldValue) {
+      this.$store.commit(types.SET_BREADCRUMBS, newValue)
+    }
+  },
+  created() {
+     this.$store.commit(types.SET_BREADCRUMBS, this.breadCrumbs)
+     this.getPaintList()
   }
 }
 </script>
