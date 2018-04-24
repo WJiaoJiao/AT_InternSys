@@ -1,12 +1,12 @@
 <template>
     <div class="content">
       <el-card>
-        <el-table stripe border :data="paints" tooltip-effect="dark" style="width: 100%">
-            <el-table-column prop="paint_id" label="画单ID" width="100"></el-table-column>
-            <el-table-column prop="paint_name" label="标题"></el-table-column>
-            <el-table-column prop="paint_id" label="操作" show-overflow-tooltip width="100">
+        <el-table stripe border :data="paints" tooltip-effect="dark" style="width: 100%" :empty-text="$t('message.noData')">
+            <el-table-column prop="paint_id" :label="$t('message.paint')+'ID'" width="100"></el-table-column>
+            <el-table-column prop="paint_name" :label="$t('message.title')"></el-table-column>
+            <el-table-column prop="paint_id" :label="$t('message.operate')" show-overflow-tooltip width="100">
                 <template  slot-scope="scope">
-                    <el-button type="primary" plain @click="showDetail(scope.row.paint_id)">查看详情</el-button>
+                    <el-button type="primary" plain @click="showDetail(scope.row.paint_id)">{{$t('message.details')}}</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -27,31 +27,40 @@ export default {
   methods: {
     showDetail (id) {
       let breads = [...this.$store.state.common.breadcrumbs]
-      breads.push({title: '详情'})
+      breads.push({title: this.$t('message.detail')})
       this.$store.commit(types.SET_BREADCRUMBS, breads)
       let type = document.location.hash.split('/')[1];
       this.$router.push({path: `/paintDetail/${type}/${id}`})
     },
   },
-  async created(){
-    this.$store.commit(types.SET_BREADCRUMBS, [
+  computed: {
+    breadCrumbs : function(){
+      return  [
         {
-          title: '分类'
+          title: this.$t('message.menuClassification')
         },
         {
           to: {
             path: '/emotionClassify'
           },
-          title: '心情'
+          title: this.$t('message.menuEmotion')
         }
       ]
-    )
+    }
+  },
+  watch: {
+    breadCrumbs: function (newValue, oldValue) {
+      this.$store.commit(types.SET_BREADCRUMBS, newValue)
+    }
+  },
+  async created(){
+    this.$store.commit(types.SET_BREADCRUMBS, this.breadCrumbs)
     try{
       let respData = await getMoodHome();
       if(respData.paints && respData.paints.length > 0){
         this.paints = respData.paints
       }else{
-        this.$message('没有数据！');
+        this.$message(this.$t('message.noData'));
       }
     }catch(e){
       this.$message.error(e.err);

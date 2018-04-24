@@ -2,130 +2,130 @@
     <div class="content">
       <el-card>
         <el-form ref="form" :model="paintDetail" label-width="130px" label-position="left">
-            <el-form-item label="画单ID">
+            <el-form-item :label="$t('message.paint')+'ID'">
                 <el-input v-model="paintDetail.paint_id" disabled></el-input>
             </el-form-item>
-            <el-form-item label="浏览数量">
+            <el-form-item :label="$t('message.readNumber')">
                 <el-input v-model="paintDetail.read_num" disabled></el-input>
             </el-form-item>
-            <el-form-item label="收藏数量" v-if="type != 'emotionClassify' && type != 'artClassify' && type!='sceneClassify'">
+            <el-form-item :label="$t('message.collectNumber')" v-if="type != 'emotionClassify' && type != 'artClassify' && type!='sceneClassify'">
                 <el-input v-model="paintDetail.collect_num" disabled></el-input>
             </el-form-item>
-            <el-form-item label="作品数量">
+            <el-form-item :label="$t('message.pictureNumber')">
                 <el-input v-model="paintDetail.picture_num" disabled></el-input>
             </el-form-item>
-            <el-form-item label="标题">
+            <el-form-item :label="$t('message.title')">
                 <el-input v-model="paintDetail.paint_title" :disabled="type == 'emotionClassify' || type == 'artClassify' || type == 'sceneClassify' ? true : false"></el-input>
             </el-form-item>
-            <el-form-item label="副标题" v-if="type != 'emotionClassify' && type != 'artClassify' && type!='sceneClassify'">
+            <el-form-item :label="$t('message.subtitle')" v-if="type != 'emotionClassify' && type != 'artClassify' && type!='sceneClassify'">
                 <el-input v-model="paintDetail.sub_title"></el-input>
             </el-form-item>
-            <el-form-item label="详细描述" v-if="type != 'emotionClassify' && type != 'artClassify' && type!='sceneClassify'">
+            <el-form-item :label="$t('message.detailedDescription')" v-if="type != 'emotionClassify' && type != 'artClassify' && type!='sceneClassify'">
                 <el-input v-model="paintDetail.paint_detail"></el-input>
             </el-form-item>
-            <el-form-item label="封面原图" v-if="type != 'emotionClassify' && type != 'artClassify' && type!='sceneClassify'">
-                <el-button type="primary" plain @click="()=>{this.originPicVisible = true}">预览</el-button>
+            <el-form-item :label="$t('message.coverOriginal')" v-if="type != 'emotionClassify' && type != 'artClassify' && type!='sceneClassify'">
+                <el-button type="primary" plain @click="()=>{this.originPicVisible = true}">{{$t('message.preview')}}</el-button>
                 <upload-detail :src="paintDetail.title_detail_url" @setSuccess="setSuccess"></upload-detail>
             </el-form-item>
-            <el-form-item label="封面缩略图" v-if="type != 'emotionClassify'">
-                <el-button type="primary" plain @click="()=>{this.thumbnailPicVisible = true}">预览</el-button>
-                <el-button type="primary" plain @click="editThumbnailPic()" v-if="type != 'artClassify' && type!='sceneClassify'">修改</el-button>
+            <el-form-item :label="$t('message.coverThumbnail')" v-if="type != 'emotionClassify'">
+                <el-button type="primary" plain @click="()=>{this.thumbnailPicVisible = true}">{{$t('message.preview')}}</el-button>
+                <el-button type="primary" plain @click="editThumbnailPic()" v-if="type != 'artClassify' && type!='sceneClassify'">{{$t('message.modify')}}</el-button>
             </el-form-item>
-            <el-form-item label="画作信息">
-                <el-table :data="picture_info" border style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange">
+            <el-form-item :label="$t('message.pictureInformation')">
+                <el-table :data="picture_info" border style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange" :empty-text="$t('message.noData')">
                     <el-table-column type="selection" width="55"></el-table-column>
-                    <el-table-column prop="picture_id" label="编号" width="80">
+                    <el-table-column prop="picture_id" :label="$t('message.id')" width="80">
                     </el-table-column>
-                    <el-table-column prop="picture_type" label="类型" width="80">
+                    <el-table-column prop="picture_type" :label="$t('message.type')" width="80">
                         <template slot-scope="scope">
-                            <span>{{scope.row.picture_type ? (scope.row.picture_type === 1 ? '横图' : '竖图') : ''}}</span>
+                            <span>{{scope.row.picture_type ? (scope.row.picture_type === 1 ? $t('message.horizontal') : $t('message.vertical')) : ''}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column label="原图"  width="220">
+                    <el-table-column :label="$t('message.original')"  width="240">
                         <template slot-scope="scope">
-                            <el-button type="primary" plain @click="showPic(scope.row.detail_url)">预览</el-button>
+                            <el-button type="primary" plain @click="showPic(scope.row.detail_url)">{{$t('message.preview')}}</el-button>
                             <upload-detail :src="scope.row.detail_url" @setSuccess="setSuccess"></upload-detail>
                         </template>
                     </el-table-column>
-                    <el-table-column label="缩略图" width="180">
+                    <el-table-column :label="$t('message.thumbnail')" width="200">
                         <template slot-scope="scope">
-                            <el-button type="primary" plain @click="showThumbnail(scope.row.picture_url)">预览</el-button>
-                            <el-button type="primary" plain @click="editPicture(scope.row.detail_url,scope.row.picture_url)">修改</el-button>
+                            <el-button type="primary" plain @click="showThumbnail(scope.row.picture_url)">{{$t('message.preview')}}</el-button>
+                            <el-button type="primary" plain @click="editPicture(scope.row.detail_url,scope.row.picture_url)">{{$t('message.modify')}}</el-button>
                         </template>
                     </el-table-column>
-                    <el-table-column label="操作">
+                    <el-table-column :label="$t('message.operate')">
                         <template slot-scope="scope">
-                            <el-button type="primary" plain @click="getPicInfo(scope.row.picture_id)">详情</el-button>
+                            <el-button type="primary" plain @click="getPicInfo(scope.row.picture_id)">{{$t('message.details')}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
                 <div style="width: 100%;text-align: center">
-                    <el-button type="primary" plain @click="getDetail('loadmore')" :disabled="last_id ? false : true" style="width: 100%;margin-top: 30px" v-if="pictureHasData">加载更多</el-button>
+                    <el-button type="primary" plain @click="getDetail('loadmore')" :disabled="last_id ? false : true" style="width: 100%;margin-top: 30px" v-if="pictureHasData">{{$t('message.loadMore')}}</el-button>
                 </div>
                 <div style="margin-top: 20px;text-align: right">
-                    <el-button type="primary" @click="addPic">添加画作</el-button>
-                    <el-button type="danger" @click="deletePic">移除画作</el-button>
+                    <el-button type="primary" @click="addPic">{{$t('message.add')}} {{$t('message.picture')}}</el-button>
+                    <el-button type="danger" @click="deletePic">{{$t('message.remove')}} {{$t('message.picture')}}</el-button>
                 </div>
                 <div style="margin-top: 20px;text-align: right" v-if="type != 'emotionClassify' && type != 'artClassify' && type != 'artClassify' && type!='sceneClassify'">
-                    <el-button type="primary" @click="save">保存</el-button>
+                    <el-button type="primary" @click="save">{{$t('message.save')}}</el-button>
                 </div>
             </el-form-item>
         </el-form>
-        <preview-img title="预览封面原图" :visible="originPicVisible" :src="paintDetail.title_detail_url" @close="()=>{this.originPicVisible = false}"></preview-img>
-        <preview-img title="预览封面缩略图" :visible="thumbnailPicVisible" :src="paintDetail.title_url"  @close="()=>{this.thumbnailPicVisible = false}"></preview-img>
-        <preview-img title="预览原图" :visible="originVisible" :src="detail_url"  @close="()=>{this.originVisible = false}"></preview-img>
-        <preview-img title="预览缩略图" :visible="thumbnailVisible" :src="picture_url"  @close="()=>{this.thumbnailVisible = false}"></preview-img>
-        <upload-thumbnail title="修改封面缩略图" :visible="editThumbnailVisible" :src="paintDetail.title_detail_url" @close="editThumbnailVisible=false" :size="{width: 708,height:336}" :thumbnailUrl="paintDetail.title_url" @setSuccess="setSuccess"></upload-thumbnail>
-        <upload-thumbnail title="修改画作缩略图" :visible="editPictureVisible" :src="detail_url" @close="editPictureVisible=false" :size="{width: 218,height:218}" :thumbnailUrl="picture_url" @setSuccess="setSuccess"></upload-thumbnail>
+        <preview-img :title="$t('message.preview')+' '+$t('message.coverOriginal')" :visible="originPicVisible" :src="paintDetail.title_detail_url" @close="()=>{this.originPicVisible = false}"></preview-img>
+        <preview-img :title="$t('message.preview')+' '+$t('message.coverThumbnail')" :visible="thumbnailPicVisible" :src="paintDetail.title_url"  @close="()=>{this.thumbnailPicVisible = false}"></preview-img>
+        <preview-img :title="$t('message.preview')+' '+$t('message.original')" :visible="originVisible" :src="detail_url"  @close="()=>{this.originVisible = false}"></preview-img>
+        <preview-img :title="$t('message.preview')+' '+$t('message.thumbnail')" :visible="thumbnailVisible" :src="picture_url"  @close="()=>{this.thumbnailVisible = false}"></preview-img>
+        <upload-thumbnail :title="$t('message.modify')+' '+$t('message.coverThumbnail')" :visible="editThumbnailVisible" :src="paintDetail.title_detail_url" @close="editThumbnailVisible=false" :size="{width: 708,height:336}" :thumbnailUrl="paintDetail.title_url" @setSuccess="setSuccess"></upload-thumbnail>
+        <upload-thumbnail :title="$t('message.modify')+' '+$t('message.picture')+' '+$t('message.thumbnail')" :visible="editPictureVisible" :src="detail_url" @close="editPictureVisible=false" :size="{width: 218,height:218}" :thumbnailUrl="picture_url" @setSuccess="setSuccess"></upload-thumbnail>
 
         <el-dialog
-          title="画作详情"
+          :title="this.$t('message.pictureDetial')"
           :visible.sync="pictureInfoVisible"
           width="600px">
-            <el-form label-position="left" label-width="80px" :model="picture_detail">
-                <el-form-item label="编号">
+            <el-form label-position="left" label-width="90px" :model="picture_detail">
+                <el-form-item :label="$t('message.id')">
                     <el-input v-model="picture_detail.picture_id"></el-input>
                 </el-form-item>
-                <el-form-item label="图片">
+                <el-form-item :label="$t('message.image')">
                     <img :src="picture_detail.picture_url" style="width: 200px;height: auto"/>
                 </el-form-item>
-                <el-form-item label="作者">
+                <el-form-item :label="$t('message.author')">
                     <el-input v-model="picture_detail.author"></el-input>
                 </el-form-item>
-                <el-form-item label="创作年代">
+                <el-form-item :label="$t('message.ceateTime')">
                     <el-input v-model="picture_detail.time"></el-input>
                 </el-form-item>
-                <el-form-item label="尺寸">
+                <el-form-item :label="$t('message.size')">
                     <el-input v-model="picture_detail.size"></el-input>
                 </el-form-item>
-                <el-form-item label="简介">
+                <el-form-item :label="$t('message.introduction')">
                     <el-input v-model="picture_detail.detail"></el-input>
                 </el-form-item>
-                <el-form-item label="视频地址">
+                <el-form-item :label="$t('message.videoUrl')">
                     <el-input v-model="picture_detail.video_url"></el-input>
                 </el-form-item>
             </el-form>
         </el-dialog>
 
-        <el-dialog title="添加画作" :visible.sync="addPictureVisible" width="440px" @close="closeDialogAction">
+        <el-dialog :title="$t('message.add')+' '+$t('message.picture')" :visible.sync="addPictureVisible" width="440px" @close="closeDialogAction">
               <el-form :inline="true" class="demo-form-inline" ref="addPictureForm">
-                  <el-form-item label="画作编号" label-width="120px">
+                  <el-form-item :label="$t('message.picture')+'ID'" label-width="120px">
                       <el-input v-model="addPictureId"></el-input>
                   </el-form-item>
                   <el-form-item>
-                      <el-button type="primary" @click="confirmPictureId" :disabled="confirmAddDis">确认</el-button>
+                      <el-button type="primary" @click="confirmPictureId" :disabled="confirmAddDis">{{$t('message.confirm')}}</el-button>
                   </el-form-item>
               </el-form>
-              <el-table :data="addPictureIds">
-                  <el-table-column property="add_picture_id" label="画作编号" width="350"></el-table-column>
-                  <el-table-column  property="add_picture_id" label="删除">
+              <el-table :data="addPictureIds" :empty-text="$t('message.noData')">
+                  <el-table-column property="add_picture_id" :label="$t('message.picture')+'ID'" width="350"></el-table-column>
+                  <el-table-column  property="add_picture_id" :label="$t('message.delete')">
                       <template slot-scope="scope">
                           <i class="el-icon-close" style="font-size: 20px" @click="deleteAddPicture(scope.row.add_picture_id)"></i>
                       </template>
                   </el-table-column>
               </el-table>
                <span slot="footer" class="dialog-footer">
-                  <el-button type="primary" @click="addPictureAction" :disabled="addButtonDis">添 加</el-button>
+                  <el-button type="primary" @click="addPictureAction" :disabled="addButtonDis">{{$t('message.add')}}</el-button>
               </span>
           </el-dialog>
       </el-card>
@@ -237,20 +237,20 @@ export default {
             sub_title: this.paintDetail.sub_title
         }
         if(!data.paint_title){
-            this.$message.error('请填写标题！')
+            this.$message.error(this.$t('message.fillTitle'))
             return
         }
         if(!data.paint_detail){
-            this.$message.error('请填写简介！')
+            this.$message.error(this.$t('message.fillIntro'))
             return
         }
         if(!data.sub_title){
-            this.$message.error('请填写副标题！')
+            this.$message.error(this.$t('message.fillSubTitle'))
             return
         }
         try{
             let updatePaintData = await updatePaint(data);
-            this.$message.success('修改成功！')
+            this.$message.success(this.$t('message.modifySuccess'))
             this.last_id = 0
             this.picture_info = []
             this.getDetail()
@@ -273,13 +273,13 @@ export default {
     },
     async deletePic() {
       if(this.picture_ids.length === 0){
-        this.message.warning('请勾选至少一条数据！')
+        this.$message.warning(this.$t('message.checkOneData'))
         return
       }
       try{
-          await this.$confirm('确定要移除该画作吗?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
+          await this.$confirm(this.$t('message.removePictureWarning'), this.$t('message.prompt'), {
+              confirmButtonText: this.$t('message.confirm'),
+              cancelButtonText: this.$t('message.cancle'),
               type: 'warning',
               center: true
           })
@@ -289,7 +289,7 @@ export default {
             picture_ids: this.picture_ids
           }
           let respData = await addDeletePaint(data)
-          this.$message.success('删除成功')
+          this.$message.success(this.$t('message.removeSuccess'))
           this.last_id = 0
           this.picture_info = []
           this.getDetail()
@@ -324,7 +324,7 @@ export default {
         }
         try{
             let respData = await addDeletePaint(data)
-            this.$message.success('添加成功！')
+            this.$message.success(this.$t('message.addSuccess'))
             this.addPictureVisible = false
             this.last_id = 0
             this.picture_info = []
@@ -336,12 +336,12 @@ export default {
     confirmPictureId() {
       for(let i = 0; i < this.addPictureIds.length; i++){
           if(this.addPictureId == this.addPictureIds[i].add_picture_id){
-              this.$message.warning('请不要重复添加！')
+              this.$message.warning(this.$t('message.noRepeatAdd'))
               return
           }
       }
       if (!this.checkNumber(this.addPictureId)) {
-          this.$message.warning('请输入数字!')
+          this.$message.warning(this.$t('message.enterNumber'))
           return
       }
       this.add_picture_ids.push(Number(this.addPictureId))
@@ -376,31 +376,31 @@ export default {
       this.type = type
       let title = ''
       if(type == 'lastedList'){
-        title = '最新列表'
+        title = this.$t('message.menuLasted')
       }
       if(type == 'hottestList'){
-        title = '最热列表'
+        title = this.$t('message.menuHottest')
       }
       if(type == 'todayList'){
-        title =  '今日推荐列表'
+        title =  this.$t('message.menuTodayRecommendsBanner')
       }
       if(type == 'artList'){
-        title =  '艺术先锋列表'
+        title =  this.$t('message.menuArtVanBanner')
       }
       if(type == 'artClassify'){
-        title =  '艺术'
+        title =  this.$t('message.menuArt')
       }
       if(type == 'emotionClassify'){
-          title =  '心情'
+          title =  this.$t('message.menuEmotion')
       }
       if(type == 'sceneClassify'){
-          title =  '场景'
+          title =  this.$t('message.menuScene')
       }
       if(type == 'normalList'){
-          title =  '普通画单列表'
+          title =  this.$t('message.menuOrdinaryPainting')
       }
       if(type == 'authorList'){
-          title =  '作者画单列表'
+          title =  this.$t('message.menuAuthorPainting')
       }
       if(type == 'normalList' || type == 'authorList'){
           this.$store.commit(types.SET_BREADCRUMBS, [
@@ -408,13 +408,13 @@ export default {
                 title
             },
             {
-                title: '详情'
+                title: this.$t('message.detail')
             }
         ])
       }else{
           this.$store.commit(types.SET_BREADCRUMBS, [
             {
-                title: type == 'artClassify' ||  type == 'emotionClassify' || type == 'sceneClassify' ? '分类' : '首页推荐'
+                title: type == 'artClassify' ||  type == 'emotionClassify' || type == 'sceneClassify' ? this.$t('message.menuClassification') : this.$t('message.menuRecommend')
             },
             {
             to: {
@@ -423,11 +423,11 @@ export default {
             title
             },
             {
-            title: '详情'
+            title: this.$t('message.detail')
             }
         ])
       }
-
+      
       this.getDetail()
   }
 }

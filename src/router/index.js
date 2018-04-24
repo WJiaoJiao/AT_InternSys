@@ -3,14 +3,14 @@ import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import uploadExcel from '@/views/uploadExcel/index.vue'
 import uploadImg from '@/views/uploadImg/index.vue'
-import paintingList from '@/views/painting/paintingList.vue'
+// import paintingList from '@/views/painting/paintingList.vue'
 import lastedList from '@/views/lastedList/index.vue'
 import paintDetail from '@/views/paintDetail/index.vue'
 import hottestList from '@/views/hottestList/index.vue'
 import todayList from '@/views/todayList/index.vue'
 import artList from '@/views/artList/index.vue'
 import normalList from '@/views/normalList/index.vue'
-import grandCafeList from '@/views/grandCafeList/index.vue'
+import artistsWordsList from '@/views/artistsWordsList/index.vue'
 import readWonderList from '@/views/readWonderList/index.vue'
 import authorList from '@/views/authorList/index.vue'
 import artClassify from '@/views/artClassify/index.vue'
@@ -39,11 +39,11 @@ export default new Router({
       name: 'uploadImg',
       component: uploadImg
     },
-    {
-      path: '/paintingList',
-      name: 'paintingList',
-      component: paintingList
-    },
+    // {
+    //   path: '/paintingList',
+    //   name: 'paintingList',
+    //   component: paintingList
+    // },
     {
       path: '/lastedList',
       name: 'lastedList',
@@ -75,9 +75,9 @@ export default new Router({
       component: normalList
     },
     {
-      path: '/grandCafeList',
-      name: 'grandCafeList',
-      component: grandCafeList
+      path: '/artistsWordsList',
+      name: 'artistsWordsList',
+      component: artistsWordsList
     },
     {
       path: '/readWonderList',

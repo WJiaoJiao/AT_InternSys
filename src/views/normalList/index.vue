@@ -25,13 +25,23 @@ export default {
           }
       }
   },
-  created(){
-    this.$store.commit(types.SET_BREADCRUMBS, [{
-      to: {
-        path: '/normalList'
-      },
-      title: '普通画单列表'
-    }])
+  computed: {
+    breadCrumbs : function(){
+      return [{
+        to: {
+          path: '/normalList'
+        },
+         title: this.$t('message.menuOrdinaryPainting')
+      }]
+    }
+  },
+  watch: {
+    breadCrumbs: function (newValue, oldValue) {
+      this.$store.commit(types.SET_BREADCRUMBS, newValue)
+    }
+  },
+  created: function(){
+     this.$store.commit(types.SET_BREADCRUMBS, this.breadCrumbs)
   }
 }
 </script>

@@ -2,11 +2,11 @@
     <div class="content">
       <el-card>
           <el-form :inline="true" :model="formInline" class="demo-form-inline">
-            <el-form-item label="画单ID">
-                <el-input v-model="formInline.paint_id" placeholder="画单ID"></el-input>
+            <el-form-item :label="$t('message.paint')+'ID'">
+                <el-input v-model="formInline.paint_id" :placeholder="$t('message.paint')+'ID'"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="onSubmit">设置</el-button>
+                <el-button type="primary" @click="onSubmit">{{$t('message.setUp')}}</el-button>
             </el-form-item>
         </el-form>
       </el-card>
@@ -24,32 +24,41 @@ export default {
   },
   methods: {
     async onSubmit() {
-      if(!this.formInline.paint_id){
-          this.$message.warning('请填写所要设置的画单ID！')
-          return
-      }
-      try{
-        await this.$confirm('确定要设置最新资讯吗?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning',
-            center: true
-        })
-        let respData = await setNewPaint({paint_id: Number(this.formInline.paint_id)})
-        this.$message.success('设置成功！')
-        this.formInline = {}
-      }catch(e){
-          if (e != 'cancel') {this.$message.error(e.err)}
-      }
+        if(!this.formInline.paint_id){
+            this.$message.warning(this.$t('message.setPaintInfo'))
+            return
+        }
+        try{
+            await this.$confirm(this.$t('message.setLatestNewsInfo'), this.$t('message.prompt'), {
+                confirmButtonText: this.$t('message.confirm'),
+                cancelButtonText: this.$t('message.cancle'),
+                type: 'warning',
+                center: true
+            })
+            let respData = await setNewPaint({paint_id: Number(this.formInline.paint_id)})
+            this.$message.success(this.$t('message.setUpSuccess'))
+            this.formInline = {}
+        }catch(e){
+            if (e != 'cancel') {this.$message.error(e.err)}
+        }
     }
   },
-  async created(){
-    this.$store.commit(types.SET_BREADCRUMBS, [
+  computed: {
+    breadCrumbs : function(){
+      return  [
         {
-          title: '最新资讯'
+            title: this.$t('message.menuLastestNews')
         }
       ]
-    )
+    }
+  },
+  watch: {
+    breadCrumbs: function (newValue, oldValue) {
+      this.$store.commit(types.SET_BREADCRUMBS, newValue)
+    }
+  },
+  created() {
+     this.$store.commit(types.SET_BREADCRUMBS, this.breadCrumbs)
   }
 }
 </script>

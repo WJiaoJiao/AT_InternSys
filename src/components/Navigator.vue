@@ -6,13 +6,24 @@
       :index="menu.route"
       >{{menu.title}}</el-menu-item>
         <el-submenu v-else :index="menu.route">
+          <!--{{menu.title}}-->
           <template slot="title">{{menu.title}}</template>
+          <!--{{subMenu.title}}-->
           <el-menu-item
           v-for="(subMenu,index) in menu.children"
           :key="index"
           :index="subMenu.route">{{subMenu.title}}</el-menu-item>
         </el-submenu>
     </template>
+    <el-dropdown style="line-height: 60px" @command="handleCommand">
+      <span class="el-dropdown-link">
+        {{$t('message.language')}}<i class="el-icon-arrow-down el-icon--right"></i>
+      </span>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item command="Chinese">{{$t('message.chinese')}}</el-dropdown-item>
+        <el-dropdown-item command="English">{{$t('message.english')}}</el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
     <img src="static/logo.png" style="margin-top: 7px;float: right"/>
     <!--<el-button type="primary" style="margin-top: 14px;float: right" @click="dialogVisible = true">登录</el-button>-->
     <el-dialog
@@ -34,83 +45,7 @@ export default {
   data () {
     return {
       defaultActive: '/',
-      dialogVisible: false,
-      menus: [
-        {
-          title: '上传',
-          route: 'upload',
-          children: [
-            {
-              title: '上传Excel',
-              route: '/uploadExcel'
-            },
-            {
-              title: '上传图片',
-              route: '/uploadImg'
-            }
-          ]
-        },
-        {
-          title: '普通画单',
-          route: '/normalList'
-        },
-        {
-          title: '作者画单',
-          route: '/authorList'
-        },
-        {
-          title: '最新资讯',
-          route: '/latestNews'
-        },
-        {
-          title: '首页推荐',
-          route: 'paintClassify',
-          children: [
-            {
-              title: '最新',
-              route: '/lastedList'
-            },
-            {
-              title: '最热',
-              route: '/hottestList'
-            },
-            {
-              title: '今日推荐Banner',
-              route: '/todayList'
-            },
-            {
-              title: '艺术先锋Banner',
-              route: '/artList'
-            }
-          ]
-        },
-        {
-          title: '大咖说',
-          route: '/grandCafeList'
-        },
-        {
-          title: '读精彩',
-          route: '/readWonderList'
-        },
-        {
-          title: '分类',
-          route: 'classification',
-          children: [
-            {
-              title: '艺术',
-              route: '/artClassify'
-            },
-            {
-              title: '心情',
-              route: '/emotionClassify'
-            },
-            {
-              title: '场景',
-              route: '/sceneClassify'
-            }
-          ]
-        }
-      ]
+      dialogVisible: false
     }
   },
   methods: {
@@ -120,6 +55,91 @@ export default {
           done();
         })
         .catch(_ => {});
+    },
+    handleCommand(command) {
+      this.$i18n.locale = command;
+      location.reload();      
+      localStorage.setItem('language', command);
+    }
+  },
+  computed: {
+    menus: function(){
+      return [
+        {
+          title: this.$t('message.menuUpload'),
+          route: 'upload',
+          children: [
+            {
+              title: this.$t('message.menuUploadExcel'),
+              route: '/uploadExcel'
+            },
+            {
+              title: this.$t('message.menuUploadImage'),
+              route: '/uploadImg'
+            }
+          ]
+        },
+        {
+          title: this.$t('message.menuOrdinaryPainting'),
+          route: '/normalList'
+        },
+        {
+          title: this.$t('message.menuAuthorPainting'),
+          route: '/authorList'
+        },
+        {
+          title: this.$t('message.menuLastestNews'),
+          route: '/latestNews'
+        },
+        {
+          title: this.$t('message.menuRecommend'),
+          route: 'paintClassify',
+          children: [
+            {
+              title: this.$t('message.menuLasted'),
+              route: '/lastedList'
+            },
+            {
+              title: this.$t('message.menuHottest'),
+              route: '/hottestList'
+            },
+            {
+              title: this.$t('message.menuTodayRecommendsBanner'),
+              route: '/todayList'
+            },
+            {
+              title: this.$t('message.menuArtVanBanner'),
+              route: '/artList'
+            }
+          ]
+        },
+        {
+          title: this.$t('message.menuArtistsWords'),
+          route: '/artistsWordsList'
+        },
+        {
+          title: this.$t('message.menuReadWonder'),
+          route: '/readWonderList'
+        },
+        {
+          title: this.$t('message.menuClassification'),
+          route: 'classification',
+          children: [
+            {
+              title: this.$t('message.menuArt'),
+              route: '/artClassify'
+            },
+            {
+              title: this.$t('message.menuEmotion'),
+              route: '/emotionClassify'
+            },
+            {
+              title: this.$t('message.menuScene'),
+              route: '/sceneClassify'
+            }
+          ]
+        }
+      ]
     }
   },
   created() {
@@ -139,8 +159,8 @@ export default {
     if(path.indexOf('todayList') > -1){
       this.defaultActive = '/todayList'
     }
-    if(path.indexOf('grandCafeList') > -1){
-      this.defaultActive = '/grandCafeList'
+    if(path.indexOf('artistsWordsList') > -1){
+      this.defaultActive = '/artistsWordsList'
     }
     if(path.indexOf('readWonderList') > -1){
       this.defaultActive = '/readWonderList'

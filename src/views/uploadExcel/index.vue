@@ -3,8 +3,8 @@
       <el-card>
         <el-upload class="upload-demo" drag action="/api/file/execl_upload" multiple :on-success="uploadSuccess" :on-remove="removeAction" :before-upload="beforeAvatarUpload">
             <i class="el-icon-upload"></i>
-            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-            <div class="el-upload__tip" slot="tip">只能上传xlsx文件</div>
+            <div class="el-upload__text">{{$t('message.dragTheFileHere')}}，{{$t('message.or')}} <em>{{$t('message.clickUpload')}}</em></div>
+            <div class="el-upload__tip" slot="tip">{{$t('message.onlyUpload')}} xlsx {{$t('message.file')}}</div>
         </el-upload>
         <!--<el-button type="primary" class="fr" style="margin-bottom: 20px">查询最新一次上传记录</el-button>-->
       </el-card>
@@ -24,27 +24,34 @@ export default {
     uploadSuccess: function (response, file, fileList) {
     },
     removeAction: function(){
-      var tableData = this.tableData;
-      tableData.shift()
     },
     beforeAvatarUpload: function(file){
       const isXLSX = file.name.endsWith('xlsx') || file.name.endsWith('xls')
       if (!isXLSX) {
-        this.$message.error('上传文件只能是 xlsx 格式!');
+        this.$message.error(this.$t('message.uploadExcelInfo'));
       }
       return isXLSX;
     }
   },
-  created() {
-    this.$store.commit(types.SET_BREADCRUMBS, [
+  computed: {
+    breadCrumbs : function(){
+      return [
           {
-              title: '上传'
+              title: this.$t('message.menuUpload')
           },
           {
-              title: '上传Excel'
+              title: this.$t('message.menuUploadExcel')
           }
       ]
-    )
+    }
+  },
+  watch: {
+    breadCrumbs: function (newValue, oldValue) {
+      this.$store.commit(types.SET_BREADCRUMBS, newValue)
+    }
+  },
+  created() {
+     this.$store.commit(types.SET_BREADCRUMBS, this.breadCrumbs)
   }
 }
 </script>

@@ -7,6 +7,11 @@ instance.defaults.headers = {
   'User-uin': 100000
 }
 
+let language = localStorage.getItem('language')
+if(language === 'English'){
+  instance.defaults.headers.en = 1;
+}
+
 instance.interceptors.response.use(function (response) {
   // filter all response
   if (response.status === 200) {
