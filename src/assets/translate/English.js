@@ -69,6 +69,7 @@ export const En ={
         uploadImageInfo: 'Uploading pictures can only be JPG or PNG format!',
         uploadExcelInfo: 'Uploading files can only be xlsx format!',
         deletePaintsInfo: 'Please choose the list of paintings that need to be deleted!',
+        removePaintsInfo: 'Please choose the list of paintings that need to be removed!',
         deleteDataInfo: 'Please check the data you want to delete!',
         deletePaintsLimitInfo: 'A maximum of 10 pieces of data at a time!',
         confirm: 'confirm',
@@ -98,6 +99,7 @@ export const En ={
         size: 'Size',
         videoUrl: 'Video Url',
         removePictureWarning: 'Are you sure you want to remove these pictures?',
-        pictureDetial: 'Picture Detial'
+        pictureDetial: 'Picture Detial',
+        setLatestNewsInfo: 'Do you want to set up the latest news?'
 　　 }  
 }

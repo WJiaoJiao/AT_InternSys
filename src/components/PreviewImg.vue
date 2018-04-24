@@ -4,7 +4,7 @@
         :visible="visible"
         width="340px"
         @close="close">
-        <img :src="shadowSrc" style="width: 300px;height:auto"/>
+        <img :src="shadowSrc+'?t='+(new Date().getTime())" style="width: 300px;height:auto"/>
     </el-dialog>
 </template>
 

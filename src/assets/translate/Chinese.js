@@ -69,6 +69,7 @@ export const Ch = {
         uploadImageInfo: '上传图片只能是 JPG或PNG 格式！',
         uploadExcelInfo: '上传文件只能是 xlsx 格式！',
         deletePaintsInfo: '请选择需要删除的画单！',
+        removePaintsInfo: '请选择需要移除的画单！',
         deleteDataInfo: '请选择需要删除的数据！',
         deletePaintsLimitInfo: '一次最多删除10条数据！',
         confirm: '确认',
@@ -97,7 +98,8 @@ export const Ch = {
         ceateTime: '创作年代',
         size: '尺寸',
         videoUrl: '视频链接',
-        removePictureWarning: '确定要移除这些画作吗?',
-        pictureDetial: '画作详情'
+        removePictureWarning: '确定要移除这些画作吗？',
+        pictureDetial: '画作详情',
+        setLatestNewsInfo: '确定要设置最新资讯吗？'
 　　 }  
 }

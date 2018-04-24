@@ -29,11 +29,17 @@ export default {
             return
         }
         try{
+            await this.$confirm(this.$t('message.setLatestNewsInfo'), this.$t('message.prompt'), {
+                confirmButtonText: this.$t('message.confirm'),
+                cancelButtonText: this.$t('message.cancle'),
+                type: 'warning',
+                center: true
+            })
             let respData = await setNewPaint({paint_id: Number(this.formInline.paint_id)})
             this.$message.success(this.$t('message.setUpSuccess'))
             this.formInline = {}
         }catch(e){
-            this.$message.error(e.err)
+            if (e != 'cancel') {this.$message.error(e.err)}
         }
     }
   },

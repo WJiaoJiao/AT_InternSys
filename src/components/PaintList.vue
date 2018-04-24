@@ -49,7 +49,7 @@
                 <el-button @click="toggleSelection()" v-if="type != 'author'">{{$t('message.cancle')}}</el-button>
                 <el-button type="primary" @click="homeShowAction" v-if="type == 2 || type == 3">{{$t('message.setShowOnTheFrontPage')}}</el-button>
                 <el-button type="primary" @click="addPaint" v-if="type==1 || type==2 || type==3 || type==4">{{$t('message.add')}}{{$t('message.paint')}}</el-button>
-                <el-button type="danger" @click="deletePaints" v-if="type != 'author'">{{$t('message.delete')}}</el-button>
+                <el-button type="danger" @click="deletePaints" v-if="type != 'author'">{{type == 'normal' ? $t('message.delete') : $t('message.remove')}}{{$t('message.paint')}}</el-button>
             </div>
             <el-dialog :title="$t('message.add')+$t('message.paint')" :visible.sync="addPaintVisible" width="440px" @close="closeDialogAction">
                 <el-form :inline="true" class="demo-form-inline" ref="addPaintForm">
@@ -126,7 +126,7 @@ export default {
     },
     async deletePaints() {
         if(this.paint_ids.length === 0){
-            this.$message.warning(this.$t('message.deletePaintsInfo'))
+            this.$message.warning(this.type == 'normal' ? this.$t('message.deletePaintsInfo') : this.$t('message.removePaintsInfo'))
             return
         }
         if(this.paint_ids.length > 10){
