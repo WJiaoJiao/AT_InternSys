@@ -182,6 +182,13 @@ export default {
     },
     editThumbnailPic() {
         this.editThumbnailVisible = true
+        var timer = setInterval(()=>{
+            if(document.getElementsByClassName('cropper-ajusty')[0]){
+                document.getElementsByClassName('cropper-ajusty')[0].style.width = 300+'px'
+                document.getElementsByClassName('cropper-ajusty')[0].style.height = 142+'px'
+                clearInterval(timer)
+            }
+        },0)
     },
     showPic(detail_url) {
         this.originVisible = true

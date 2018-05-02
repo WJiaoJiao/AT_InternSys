@@ -4,7 +4,7 @@
       :visible="visible"
       @close="close"
       width="645px">
-      <div class="inlineBlock" v-if="visible">
+      <div class="inlineBlock cropper-ajusty" v-if="visible">
         <img class="app-image" crossOrigin="anonymous" :src="src+'?t='+(new Date().getTime())" style="max-width: 100%;width:300px;height:auto"/>
       </div>
       <div class="inlineBlock" style="vertical-align: top">
@@ -46,7 +46,7 @@ export default {
         this.$emit('close');
     }
   },
-  async created(){
+  async created(){ 
 
   },
   watch: {
