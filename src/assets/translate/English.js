@@ -100,6 +100,8 @@ export const En ={
         videoUrl: 'Video Url',
         removePictureWarning: 'Are you sure you want to remove these pictures?',
         pictureDetial: 'Picture Detial',
-        setLatestNewsInfo: 'Do you want to set up the latest news?'
+        setLatestNewsInfo: 'Do you want to set up the latest news?',
+        ensureTheFileName: 'Please ensure that the file name is',
+        uploadSuccess: 'Upload success!'
 　　 }  
 }

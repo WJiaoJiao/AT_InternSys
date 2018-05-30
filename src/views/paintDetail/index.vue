@@ -25,7 +25,7 @@
             </el-form-item>
             <el-form-item :label="$t('message.coverOriginal')" v-if="type != 'emotionClassify' && type != 'artClassify' && type!='sceneClassify'">
                 <el-button type="primary" plain @click="()=>{this.originPicVisible = true}">{{$t('message.preview')}}</el-button>
-                <upload-detail :src="paintDetail.title_detail_url" @setSuccess="setSuccess"></upload-detail>
+                <upload-detail :id="paintId" type="paint" @setSuccess="setSuccess"></upload-detail>
             </el-form-item>
             <el-form-item :label="$t('message.coverThumbnail')" v-if="type != 'emotionClassify'">
                 <el-button type="primary" plain @click="()=>{this.thumbnailPicVisible = true}">{{$t('message.preview')}}</el-button>
@@ -44,7 +44,7 @@
                     <el-table-column :label="$t('message.original')"  width="240">
                         <template slot-scope="scope">
                             <el-button type="primary" plain @click="showPic(scope.row.detail_url)">{{$t('message.preview')}}</el-button>
-                            <upload-detail :src="scope.row.detail_url" @setSuccess="setSuccess"></upload-detail>
+                            <upload-detail :id="scope.row.picture_id" type="picture" @setSuccess="setSuccess"></upload-detail>
                         </template>
                     </el-table-column>
                     <el-table-column :label="$t('message.thumbnail')" width="200">
@@ -182,6 +182,13 @@ export default {
     },
     editThumbnailPic() {
         this.editThumbnailVisible = true
+        var timer = setInterval(()=>{
+            if(document.getElementsByClassName('cropper-ajusty')[0]){
+                document.getElementsByClassName('cropper-ajusty')[0].style.width = 300+'px'
+                document.getElementsByClassName('cropper-ajusty')[0].style.height = 142+'px'
+                clearInterval(timer)
+            }
+        },0)
     },
     showPic(detail_url) {
         this.originVisible = true
@@ -427,7 +434,7 @@ export default {
             }
         ])
       }
-      
+      this.paintId = this.$route.params.paintId
       this.getDetail()
   }
 }

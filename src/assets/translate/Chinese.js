@@ -100,6 +100,8 @@ export const Ch = {
         videoUrl: '视频链接',
         removePictureWarning: '确定要移除这些画作吗？',
         pictureDetial: '画作详情',
-        setLatestNewsInfo: '确定要设置最新资讯吗？'
+        setLatestNewsInfo: '确定要设置最新资讯吗？',
+        ensureTheFileName:'请保证文件名为',
+        uploadSuccess: '上传成功！'
 　　 }  
 }

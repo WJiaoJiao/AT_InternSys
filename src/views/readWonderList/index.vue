@@ -14,7 +14,7 @@
                 <el-table-column :label="'H5 ' + $t('message.picture')" width="240">
                     <template slot-scope="scope">
                         <el-button type="primary" plain @click="showH5Img(scope.row.cq_h5_url)">{{$t('message.preview')}}</el-button>
-                        <upload-detail :src="scope.row.cq_h5_url" @setSuccess="setSuccess"></upload-detail>
+                        <upload-detail :id="scope.row.cq_id" type="h5" :src="scope.row.cq_h5_url" @setSuccess="setSuccess"></upload-detail>
                     </template>
                 </el-table-column>
                 <el-table-column :label="$t('message.showOnTheFrontPage')" width="120">
