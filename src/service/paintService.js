@@ -56,7 +56,7 @@ export const addPaintList= (param) => request.post('/op/discovery/add_paint_list
 export const addDeletePaint= (param) => request.post('/op/painting/add_delete_paint', param)
 
 // 上传图片
-export const uploadPicture = (param) => request.post('/api/imgs/upload/common', param)
+export const uploadPicture = (param) => request.post('/api/imgs/upload/common_paint', param)
 
 // 上传excel
 export const uploadExcel = (param) => request.post('/api/file/execl_upload', param)

@@ -15,7 +15,14 @@ Vue.use(Element,{ size: 'small' })
 Vue.config.productionTip = false
 Vue.use(VueI18n)
 
-var locale = localStorage.getItem('language') ? localStorage.getItem('language') : 'Chinese'
+var locale
+if(localStorage.getItem('language')){
+  locale = localStorage.getItem('language')
+}else{
+  locale = 'Chinese'
+  localStorage.setItem('language','Chinese')
+}
+
 const i18n = new VueI18n({
   locale: locale, // 语言标识
   messages:{

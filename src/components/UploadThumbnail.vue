@@ -9,7 +9,7 @@
       </div>
       <div class="inlineBlock" style="vertical-align: top">
         <img class="block app-temp" width="300"  height="auto" />
-        <el-button type="primary" @click="uploadThumbnail" class="fr" style="margin-top:20px">上传</el-button>
+        <el-button type="primary" @click="uploadThumbnail" class="fr" style="margin-top:20px">{{$t('message.menuUpload')}}</el-button>
       </div>
     </el-dialog>
 </template>
@@ -34,7 +34,7 @@ export default {
         formData.append('file', blob, fileName)
         try{
           let respData = await uploadPicture(formData)
-          that.$message.success('修改成功')
+          that.$message.success(that.$t('message.modifySuccess'))
           that.$emit('close');
           that.$emit('setSuccess')
         }catch(e){
