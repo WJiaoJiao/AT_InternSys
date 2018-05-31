@@ -50,7 +50,7 @@
                     <el-table-column :label="$t('message.thumbnail')" width="200">
                         <template slot-scope="scope">
                             <el-button type="primary" plain @click="showThumbnail(scope.row.picture_url)">{{$t('message.preview')}}</el-button>
-                            <el-button type="primary" plain @click="editPicture(scope.row.detail_url,scope.row.picture_url)">{{$t('message.modify')}}</el-button>
+                            <el-button type="primary" plain @click="editPicture(scope.row.detail_url,scope.row.picture_url,scope.row.picture_id)">{{$t('message.modify')}}</el-button>
                         </template>
                     </el-table-column>
                     <el-table-column :label="$t('message.operate')">
@@ -75,8 +75,8 @@
         <preview-img :title="$t('message.preview')+' '+$t('message.coverThumbnail')" :visible="thumbnailPicVisible" :src="paintDetail.title_url"  @close="()=>{this.thumbnailPicVisible = false}"></preview-img>
         <preview-img :title="$t('message.preview')+' '+$t('message.original')" :visible="originVisible" :src="detail_url"  @close="()=>{this.originVisible = false}"></preview-img>
         <preview-img :title="$t('message.preview')+' '+$t('message.thumbnail')" :visible="thumbnailVisible" :src="picture_url"  @close="()=>{this.thumbnailVisible = false}"></preview-img>
-        <upload-thumbnail :title="$t('message.modify')+' '+$t('message.coverThumbnail')" :visible="editThumbnailVisible" :src="paintDetail.title_detail_url" @close="editThumbnailVisible=false" :size="{width: 708,height:336}" :thumbnailUrl="paintDetail.title_url" @setSuccess="setSuccess"></upload-thumbnail>
-        <upload-thumbnail :title="$t('message.modify')+' '+$t('message.picture')+' '+$t('message.thumbnail')" :visible="editPictureVisible" :src="detail_url" @close="editPictureVisible=false" :size="{width: 218,height:218}" :thumbnailUrl="picture_url" @setSuccess="setSuccess"></upload-thumbnail>
+        <upload-thumbnail :title="$t('message.modify')+' '+$t('message.coverThumbnail')" :visible="editThumbnailVisible" :src="paintDetail.title_detail_url" @close="editThumbnailVisible=false" :size="{width: 708,height:336}" :thumbnailUrl="paintDetail.title_url" @setSuccess="setSuccess" :id="paintId" type="paint"></upload-thumbnail>
+        <upload-thumbnail :title="$t('message.modify')+' '+$t('message.picture')+' '+$t('message.thumbnail')" :visible="editPictureVisible" :src="detail_url" @close="editPictureVisible=false" :size="{width: 218,height:218}" :thumbnailUrl="picture_url" @setSuccess="setSuccess" :id="picture_id" type="picture"></upload-thumbnail>
 
         <el-dialog
           :title="this.$t('message.pictureDetial')"
@@ -162,6 +162,7 @@ export default {
       editPictureVisible: false,
       detail_url: '',
       picture_url: '',
+      picture_id: '',
       picture_detail: {},
       cropper: null,
       picture_ids: [],
@@ -265,10 +266,11 @@ export default {
             this.$message.error(e.err);
         }
     },
-    editPicture(detail_url,picture_url) {
+    editPicture(detail_url,picture_url,picture_id) {
         this.editPictureVisible = true
         this.detail_url = detail_url
         this.picture_url = picture_url
+        this.picture_id = picture_id
     },
     handleSelectionChange(val) {
         this.multipleSelection = val;

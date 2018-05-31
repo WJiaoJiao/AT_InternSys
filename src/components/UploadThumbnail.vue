@@ -19,7 +19,7 @@ import Cropper from 'cropperjs'
 import 'cropperjs/dist/cropper.css'
 import {uploadPicture} from '@/service/paintService.js'
 export default {
-  props: ['title','visible','src','size','thumbnailUrl'],
+  props: ['title','visible','src','size','thumbnailUrl','id','type'],
   data () {
     return {
       cropper: null
@@ -28,7 +28,13 @@ export default {
   methods: {
     uploadThumbnail() {
       var that = this
-      let fileName = decodeURI(this.thumbnailUrl).split('/').pop()
+      let fileName
+      if(this.type === 'paint'){
+        fileName = 'L'+this.id+'A.jpg'
+      }
+      if(this.type === 'picture'){
+        fileName = this.id+'A.jpg'
+      }
       this.cropper.getCroppedCanvas().toBlob(async function (blob) {
         var formData = new FormData()
         formData.append('file', blob, fileName)
